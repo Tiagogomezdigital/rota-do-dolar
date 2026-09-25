@@ -1,0 +1,36 @@
+/** Stable IDs belong to analytics. When changing meaning/options, publish a new content version. */
+export const CONTENT_VERSION = 'skeleton-v1';
+export const content = {
+  brand: 'PRÓXIMO PASSO',
+  preview: true,
+  hero: { eyebrow: 'UMA NOVA POSSIBILIDADE PARA VOCÊ', title: 'Seu próximo capítulo', highlight: 'começa com uma escolha.', description: 'Descubra um caminho que combine com o seu momento — e dê o primeiro passo para o que você quer conquistar.', cta: 'Descobrir meu próximo passo', imageUrl: '' },
+  expert: { name: '[Nome do especialista]', description: 'Toda mudança começa com um primeiro passo. Aqui vamos contar a história de quem criou este método, o que aprendeu no caminho e como pode ajudar você.', imageUrl: '', cta: 'Conhecer o caminho' },
+  offer: { title: 'Você já deu o primeiro passo.', description: 'Agora conheça a proposta que pode ajudar a transformar sua intenção em ação.', videoUrl: '', checkoutUrl: '', cta: 'Quero dar o próximo passo' },
+};
+export type Option = { id: string; label: string; icon: string; description?: string };
+export type Question = { id: string; title: string; label: string; description: string; options: Option[] };
+const option = (id: string, label: string, icon: string, description?: string): Option => ({ id, label, icon, description });
+export const questions: Question[] = [
+  { id:'compromisso',label:'Vamos começar',title:'Vamos descobrir seu próximo passo?',description:'Responda no seu ritmo. No final, você encontra uma sugestão de por onde começar.',options:[option('sim','Sim, quero descobrir','check'),option('explorar','Quero conhecer primeiro','compass')] },
+  { id:'momento',label:'Seu ponto de partida',title:'Qual frase combina mais com o seu momento?',description:'Escolha a opção que mais se aproxima de você.',options:[option('clt','Trabalho e quero uma nova possibilidade','briefcase'),option('inicio','Estou buscando uma oportunidade','search'),option('autonomo','Trabalho por conta e quero avançar','chart'),option('mudanca','Quero construir uma nova direção','compass')] },
+  { id:'idade',label:'Um pouco sobre você',title:'Em qual fase da vida você está?',description:'Cada fase tem seu ritmo. Queremos conhecer o seu.',options:[option('18-25','Entre 18 e 25 anos','user'),option('26-35','Entre 26 e 35 anos','user'),option('36-45','Entre 36 e 45 anos','user'),option('46+','46 anos ou mais','user'),option('nao-informar','Prefiro não informar','lock')] },
+  { id:'experiencia',label:'Sua experiência',title:'Você já tentou dar esse passo antes?',description:'Seu ponto de partida ajuda a entender o que faz sentido agora.',options:[option('primeira','Seria a minha primeira vez','sprout'),option('tentativa','Já tentei, mas não consegui avançar','repeat'),option('aprendendo','Já comecei e quero aprender mais','book'),option('pratica','Já tenho experiência e quero evoluir','chart')] },
+  { id:'motivacao',label:'O que move você',title:'O que mais motiva essa mudança?',description:'Pense no que faria diferença de verdade na sua vida.',options:[option('liberdade','Ter mais liberdade de escolha','compass'),option('familia','Ter mais tempo para quem importa','heart'),option('seguranca','Construir mais tranquilidade','shield'),option('conquista','Realizar uma conquista pessoal','flag')] },
+  { id:'sentimento',label:'Como você se sente',title:'Qual sentimento descreve melhor este momento?',description:'Não existe resposta certa. Existe o seu momento.',options:[option('curioso','Estou curioso, mas preciso entender','search','Quero saber como funciona.'),option('inseguro','Estou animado, mas um pouco inseguro','heart','Quero clareza antes de começar.'),option('frustrado','Já me frustrei com outras tentativas','repeat','Quero encontrar um caminho possível.'),option('pronto','Estou pronto para colocar em prática','zap','Só preciso de uma direção.')] },
+  { id:'satisfacao',label:'Seu cenário atual',title:'Como você se sente com seus resultados hoje?',description:'Olhe para onde você está, sem se comparar com ninguém.',options:[option('insatisfeito','Quero mudar meu cenário','compass'),option('melhorar','Está tudo bem, mas quero melhorar','chart'),option('complementar','Quero construir uma alternativa','briefcase'),option('inicio','Ainda estou começando','sprout')] },
+  { id:'obstaculo',label:'O que falta hoje',title:'Qual é o maior obstáculo para começar?',description:'Escolha o que mais pesa na sua decisão.',options:[option('direcao','Não sei por onde começar','compass'),option('tempo','Tenho pouco tempo disponível','clock'),option('seguranca','Tenho receio de tentar e não conseguir','shield'),option('metodo','Ainda não encontrei um método claro','book'),option('consistencia','Tenho dificuldade em manter a constância','repeat')] },
+  { id:'conquista',label:'Seu próximo capítulo',title:'O que você gostaria de tornar possível?',description:'Imagine uma mudança que teria significado para você.',options:[option('familia','Uma vida melhor para minha família','heart'),option('liberdade','Mais autonomia sobre meu tempo','clock'),option('sonho','Um projeto que sempre deixei para depois','flag'),option('tranquilidade','Mais tranquilidade no dia a dia','shield')] },
+  { id:'objetivo',label:'Uma meta possível',title:'Qual seria uma boa primeira conquista?',description:'Vamos começar por um passo que faça sentido.',options:[option('entender','Entender o caminho e me organizar','book'),option('pratica','Sair da teoria e colocar em prática','zap'),option('resultado','Conseguir meu primeiro resultado','flag'),option('evoluir','Melhorar o que já estou fazendo','chart')] },
+  { id:'tempo',label:'O seu ritmo',title:'Quanto tempo você consegue reservar por dia?',description:'O importante é encontrar um ritmo que caiba na sua rotina.',options:[option('15-30','Entre 15 e 30 minutos','clock'),option('30-60','Entre 30 minutos e 1 hora','clock'),option('1-2h','Entre 1 e 2 horas','clock'),option('2h+','Mais de 2 horas','clock')] },
+  { id:'prontidao',label:'Quase lá',title:'Como você gostaria de seguir agora?',description:'Seu próximo passo pode começar pequeno.',options:[option('conhecer','Quero conhecer a proposta com calma','search'),option('orientacao','Quero uma orientação para começar','compass'),option('acao','Quero colocar em prática','zap')] },
+];
+export const PROCESS_STEP = questions.length + 1;
+export const STORY_STEP = questions.length + 2;
+export const RESULT_STEP = questions.length + 3;
+export const OFFER_STEP = questions.length + 4;
+export const stepNames = ['Abertura', ...questions.map(q=>q.label), 'Preparando resultado', 'Especialista', 'Seu próximo passo', 'Proposta'];
+export function getSuggestion(answers: Record<string,string>) {
+  if (answers.objetivo === 'evoluir') return { title:'Aprimorar o que você já começou', text:'Você quer evoluir. Seu primeiro passo pode ser organizar o que já funciona e escolher um ponto para melhorar.' };
+  if (answers.experiencia === 'primeira' || answers.objetivo === 'entender') return {title:'Clareza para começar',text:'Você está construindo seu ponto de partida. Conhecer o caminho e reservar um tempo na rotina pode ajudar a sair da intenção.'};
+  return {title:'Transformar intenção em prática',text:'Você já sabe que quer uma mudança. Escolher uma ação simples e repetir no seu ritmo pode ser um bom começo.'};
+}
