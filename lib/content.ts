@@ -3,7 +3,7 @@ export const CONTENT_VERSION = 'skeleton-v1';
 export const content = {
   brand: 'PRÓXIMO PASSO',
   preview: true,
-  hero: { eyebrow: 'UMA NOVA POSSIBILIDADE PARA VOCÊ', title: 'Seu próximo capítulo', highlight: 'começa com uma escolha.', description: 'Descubra um caminho que combine com o seu momento — e dê o primeiro passo para o que você quer conquistar.', cta: 'Descobrir meu próximo passo', imageUrl: '/images/tiago-fiel-hero.png' },
+  hero: { eyebrow: 'UMA NOVA POSSIBILIDADE PARA VOCÊ', title: 'Seu próximo capítulo', highlight: 'começa com uma escolha.', description: 'Descubra um caminho que combine com o seu momento — e dê o primeiro passo para o que você quer conquistar.', cta: 'Descobrir meu próximo passo', imageUrl: '/images/tiago-final-hero.png' },
   expert: { name: '[Nome do especialista]', description: 'Toda mudança começa com um primeiro passo. Aqui vamos contar a história de quem criou este método, o que aprendeu no caminho e como pode ajudar você.', imageUrl: '', cta: 'Conhecer o caminho' },
   offer: { title: 'Você já deu o primeiro passo.', description: 'Agora conheça a proposta que pode ajudar a transformar sua intenção em ação.', videoUrl: '', checkoutUrl: '', cta: 'Quero dar o próximo passo' },
 };
