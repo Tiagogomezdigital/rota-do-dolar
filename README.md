@@ -13,7 +13,7 @@ Landing page específica para um único produto, com textos e mídia provisório
 
 ## Conteúdo e ativos
 
-Editar `lib/content.ts`. Os textos são provisórios e identificados na interface. `hero.imageUrl` usa uma montagem ilustrativa de experiências, gerada com IA, com o rosto de Tiago Gomez baseado em referências do perfil público @eutiagogomez. As cenas de viagem, lazer e trabalho são conceituais; as notificações financeiras e o gráfico são exemplos ilustrativos, não resultados comprovados. `expert.imageUrl`, `offer.videoUrl` e `offer.checkoutUrl` ficam vazios até termos os materiais. IDs de questões/opções são estáveis: mudanças semânticas requerem uma nova `CONTENT_VERSION` para não misturar análises. As versões antigas permanecem no banco; este painel mostra a versão ativa.
+Editar `lib/content.ts`. Os textos são provisórios e identificados na interface. `hero.imageUrl` usa uma montagem ilustrativa de experiências, gerada com IA, com o rosto de Tiago Gomez baseado em referências do perfil público @eutiagogomez. As cenas de viagem, família, carro esportivo e trabalho são conceituais; as notificações financeiras e o gráfico são exemplos ilustrativos, não resultados comprovados. `expert.imageUrl`, `offer.videoUrl` e `offer.checkoutUrl` ficam vazios até termos os materiais. IDs de questões/opções são estáveis: mudanças semânticas requerem uma nova `CONTENT_VERSION` para não misturar análises. As versões antigas permanecem no banco; este painel mostra a versão ativa.
 
 ## Medição
 
