@@ -37,3 +37,7 @@ Migrations em `drizzle/`; a publicação as aplica ao D1 de produção. Use as i
 `npx tsc --noEmit`; `python3 tests/integration.py` com prévia e D1 local inicializados. Testes cobrem autenticação, origem, validação de opções/etapas, persistência, isolamento de sessões, revisão sem duplicação, CTA idempotente e analytics.
 
 WebMCP opcional: ferramenta read-only `read_quiz_stage`, compartilhando a etapa visível. Validação em contexto WebMCP não disponível nesta sessão; a funcionalidade principal não depende dela.
+
+## Endereço no 4yousite
+
+O quiz também é servido em `/tiago-gomes`, com API e ativos sob esse prefixo para não conflitar com o MagicSite. A Vercel encaminha somente `/tiago-gomes` e seus descendentes para o mesmo caminho no Site. O painel permanece no domínio original, com login ChatGPT e allowlist; `/tiago-gomes/admin` redireciona para ele. A API de respostas aceita apenas a própria origem e os domínios exatos `https://4yousite.com.br` e `https://www.4yousite.com.br`.

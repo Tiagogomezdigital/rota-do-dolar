@@ -14,25 +14,26 @@ def call(op,path,body=None,origin=BASE):
 def expect(op,path,body,status=200,origin=BASE):
  code,data=call(op,path,body,origin);assert code==status,(code,status,data);return data
 anon=client();expect(anon,'/api/admin',None,401)
-expect(anon,'/api/journey',{'action':'init'},403,'https://untrusted.example')
-a=client();s=expect(a,'/api/journey',{'action':'init','source':'teste-integracao','device':'mobile'},201);assert s['step']==0
-expect(a,'/api/journey',{'action':'view','step':16},400)
-expect(a,'/api/journey',{'action':'answer','questionId':'compromisso','optionId':'sim'},400)
-expect(a,'/api/journey',{'action':'view','step':1})
-expect(a,'/api/journey',{'action':'answer','questionId':'compromisso','optionId':'invalid'},400)
-expect(a,'/api/journey',{'action':'view','step':2},400)
+expect(anon,'/tiago-gomes/api/journey',{'action':'init'},403,'https://untrusted.example')
+expect(anon,'/tiago-gomes/api/journey',{'action':'init'},403,'https://4yousite.com.br.attacker.example')
+a=client();s=expect(a,'/tiago-gomes/api/journey',{'action':'init','source':'teste-integracao','device':'mobile'},201);assert s['step']==0
+expect(a,'/tiago-gomes/api/journey',{'action':'view','step':16},400)
+expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'compromisso','optionId':'sim'},400)
+expect(a,'/tiago-gomes/api/journey',{'action':'view','step':1})
+expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'compromisso','optionId':'invalid'},400)
+expect(a,'/tiago-gomes/api/journey',{'action':'view','step':2},400)
 answers=[('compromisso','sim'),('momento','clt'),('idade','26-35'),('experiencia','primeira'),('motivacao','familia'),('sentimento','curioso'),('satisfacao','melhorar'),('obstaculo','direcao'),('conquista','familia'),('objetivo','entender'),('tempo','30-60'),('prontidao','conhecer')]
 for i,(q,o) in enumerate(answers):
- data=expect(a,'/api/journey',{'action':'answer','questionId':q,'optionId':o});assert data['step']==i+2
-snapshot=expect(a,'/api/journey',None);assert snapshot['step']==13 and len(snapshot['answers'])==12
-assert expect(a,'/api/journey',{'action':'init'})['answers']==snapshot['answers']
-for step in [14,15,16]:expect(a,'/api/journey',{'action':'view','step':step})
-expect(a,'/api/journey',{'action':'cta'});expect(a,'/api/journey',{'action':'cta'})
-expect(a,'/api/journey',{'action':'view','step':2})
-expect(a,'/api/journey',{'action':'answer','questionId':'momento','optionId':'autonomo'})
-assert expect(a,'/api/journey',None)['answers']['momento']=='autonomo'
-b=client();expect(b,'/api/journey',{'action':'init','source':'teste-parcial'},201);expect(b,'/api/journey',{'action':'view','step':1});expect(b,'/api/journey',{'action':'answer','questionId':'compromisso','optionId':'explorar'})
-assert expect(b,'/api/journey',None)['answers']=={'compromisso':'explorar'}
+ data=expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':q,'optionId':o});assert data['step']==i+2
+snapshot=expect(a,'/tiago-gomes/api/journey',None);assert snapshot['step']==13 and len(snapshot['answers'])==12
+assert expect(a,'/tiago-gomes/api/journey',{'action':'init'})['answers']==snapshot['answers']
+for step in [14,15,16]:expect(a,'/tiago-gomes/api/journey',{'action':'view','step':step})
+expect(a,'/tiago-gomes/api/journey',{'action':'cta'});expect(a,'/tiago-gomes/api/journey',{'action':'cta'})
+expect(a,'/tiago-gomes/api/journey',{'action':'view','step':2})
+expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'momento','optionId':'autonomo'})
+assert expect(a,'/tiago-gomes/api/journey',None)['answers']['momento']=='autonomo'
+b=client();expect(b,'/tiago-gomes/api/journey',{'action':'init','source':'teste-parcial'},201);expect(b,'/tiago-gomes/api/journey',{'action':'view','step':1});expect(b,'/tiago-gomes/api/journey',{'action':'answer','questionId':'compromisso','optionId':'explorar'})
+assert expect(b,'/tiago-gomes/api/journey',None)['answers']=={'compromisso':'explorar'}
 # Documented starter mock sign-in, local only. No production auth bypass.
 admin=client();admin.open(BASE+'/signin-with-chatgpt?return_to=/admin').read()
 report=expect(admin,'/api/admin?range=all',None)

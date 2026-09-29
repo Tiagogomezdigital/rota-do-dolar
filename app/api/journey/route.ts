@@ -11,7 +11,7 @@ async function snapshot(session:Session){const rows=await database().prepare('SE
 export async function GET(req:Request){try{const s=await find(req);return reply(s?await snapshot(s):{step:0,answers:{},completed:false,ctaClicked:false});}catch(e){console.error('journey read failed',e);return reply({error:'Não foi possível recuperar seu progresso. Tente novamente.'},503);}}
 export async function POST(req:Request){
  try{
-  const origin=req.headers.get('origin');if(!origin||origin!==new URL(req.url).origin)return reply({error:'Origem não permitida.'},403);
+  const origin=req.headers.get('origin');if(!origin||![new URL(req.url).origin,'https://4yousite.com.br','https://www.4yousite.com.br'].includes(origin))return reply({error:'Origem não permitida.'},403);
   if(!req.headers.get('content-type')?.includes('application/json'))return reply({error:'Formato inválido.'},415);
   const raw=await req.text();if(raw.length>2048)return reply({error:'Requisição muito grande.'},413);
   let body:Record<string,unknown>;try{body=JSON.parse(raw);}catch{return reply({error:'Requisição inválida.'},400);}
