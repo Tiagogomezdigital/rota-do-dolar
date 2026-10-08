@@ -5,9 +5,9 @@ export const content = {
   preview: false,
   hero: {
     eyebrow: 'COM TIAGO GOMES',
-    title: 'Uma nova rota para',
-    highlight: 'ganhar em dólar.',
-    description: 'Conheça uma agência com inteligência artificial e estrutura pronta. Seu papel: trazer empresas para se cadastrar. Em 8 perguntas, descubra o que observar nesse modelo de comissões em dólar.',
+    title: 'Descubra como ganhar em dólar',
+    highlight: 'sem precisar aparecer.',
+    description: 'Veja como trazer empresas para uma agência com IA já montada e gerar comissões em dólar. Pelo celular, sem gravar vídeos e mesmo começando do zero.',
     cta: 'Quero conhecer essa rota',
     imageUrl: '/tiago-gomes/images/tiago-momentos-hero.png',
   },
