@@ -1,36 +1,54 @@
-/** Stable IDs belong to analytics. When changing meaning/options, publish a new content version. */
-export const CONTENT_VERSION = 'skeleton-v1';
+/** Keep previous sessions separate when question meanings or options change. */
+export const CONTENT_VERSION = 'rota-dolar-v2';
 export const content = {
-  brand: 'PRÓXIMO PASSO',
-  preview: true,
-  hero: { eyebrow: 'UMA NOVA POSSIBILIDADE PARA VOCÊ', title: 'Seu próximo capítulo', highlight: 'começa com uma escolha.', description: 'Descubra um caminho que combine com o seu momento e dê o primeiro passo para o que você quer conquistar.', cta: 'Descobrir meu próximo passo', imageUrl: '/tiago-gomes/images/tiago-momentos-hero.png' },
-  expert: { name: '[Nome do especialista]', description: 'Toda mudança começa com um primeiro passo. Aqui vamos contar a história de quem criou este método, o que aprendeu no caminho e como pode ajudar você.', imageUrl: '', cta: 'Conhecer o caminho' },
-  offer: { title: 'Você já deu o primeiro passo.', description: 'Agora conheça a proposta que pode ajudar a transformar sua intenção em ação.', videoUrl: '', checkoutUrl: '', cta: 'Quero dar o próximo passo' },
+  brand: 'ROTA DO DÓLAR',
+  preview: false,
+  hero: {
+    eyebrow: 'COM TIAGO GOMES',
+    title: 'Sua próxima fonte de renda',
+    highlight: 'pode ser em dólar.',
+    description: 'Conheça a agência com inteligência artificial do Tiago Gomes: estrutura pronta e comissões em dólar, sem precisar aparecer em vídeos. Descubra seu ponto de partida, mesmo começando do zero.',
+    cta: 'Descobrir minha rota',
+    imageUrl: '/tiago-gomes/images/tiago-momentos-hero.png',
+  },
+  expert: {
+    name: 'Tiago Gomes',
+    description: 'Para mim, conquistar mais nunca foi só sobre dinheiro. Foi sobre poder cuidar da minha mãe, estar com minha esposa e minha filha e ter mais escolhas. É essa mudança de perspectiva que eu quero apresentar a você.',
+    cta: 'Entender a rota que combina comigo',
+  },
+  offer: {
+    title: 'O dólar pode fazer parte da sua próxima rota.',
+    description: 'Tiago vai mostrar a proposta da Rota do Dólar: uma estrutura de agência com inteligência artificial e um modelo de comissões em dólar. Entenda o funcionamento antes de decidir começar.',
+    videoUrl: '', checkoutUrl: '', cta: 'Tenho interesse na Rota do Dólar',
+  },
 };
-export type Option = { id: string; label: string; icon: string; description?: string };
-export type Question = { id: string; title: string; label: string; description: string; options: Option[] };
-const option = (id: string, label: string, icon: string, description?: string): Option => ({ id, label, icon, description });
-export const questions: Question[] = [
-  { id:'compromisso',label:'Vamos começar',title:'Vamos descobrir seu próximo passo?',description:'Responda no seu ritmo. No final, você encontra uma sugestão de por onde começar.',options:[option('sim','Sim, quero descobrir','check'),option('explorar','Quero conhecer primeiro','compass')] },
-  { id:'momento',label:'Seu ponto de partida',title:'Qual frase combina mais com o seu momento?',description:'Escolha a opção que mais se aproxima de você.',options:[option('clt','Trabalho e quero uma nova possibilidade','briefcase'),option('inicio','Estou buscando uma oportunidade','search'),option('autonomo','Trabalho por conta e quero avançar','chart'),option('mudanca','Quero construir uma nova direção','compass')] },
-  { id:'idade',label:'Um pouco sobre você',title:'Em qual fase da vida você está?',description:'Cada fase tem seu ritmo. Queremos conhecer o seu.',options:[option('18-25','Entre 18 e 25 anos','user'),option('26-35','Entre 26 e 35 anos','user'),option('36-45','Entre 36 e 45 anos','user'),option('46+','46 anos ou mais','user'),option('nao-informar','Prefiro não informar','lock')] },
-  { id:'experiencia',label:'Sua experiência',title:'Você já tentou dar esse passo antes?',description:'Seu ponto de partida ajuda a entender o que faz sentido agora.',options:[option('primeira','Seria a minha primeira vez','sprout'),option('tentativa','Já tentei, mas não consegui avançar','repeat'),option('aprendendo','Já comecei e quero aprender mais','book'),option('pratica','Já tenho experiência e quero evoluir','chart')] },
-  { id:'motivacao',label:'O que move você',title:'O que mais motiva essa mudança?',description:'Pense no que faria diferença de verdade na sua vida.',options:[option('liberdade','Ter mais liberdade de escolha','compass'),option('familia','Ter mais tempo para quem importa','heart'),option('seguranca','Construir mais tranquilidade','shield'),option('conquista','Realizar uma conquista pessoal','flag')] },
-  { id:'sentimento',label:'Como você se sente',title:'Qual sentimento descreve melhor este momento?',description:'Não existe resposta certa. Existe o seu momento.',options:[option('curioso','Estou curioso, mas preciso entender','search','Quero saber como funciona.'),option('inseguro','Estou animado, mas um pouco inseguro','heart','Quero clareza antes de começar.'),option('frustrado','Já me frustrei com outras tentativas','repeat','Quero encontrar um caminho possível.'),option('pronto','Estou pronto para colocar em prática','zap','Só preciso de uma direção.')] },
-  { id:'satisfacao',label:'Seu cenário atual',title:'Como você se sente com seus resultados hoje?',description:'Olhe para onde você está, sem se comparar com ninguém.',options:[option('insatisfeito','Quero mudar meu cenário','compass'),option('melhorar','Está tudo bem, mas quero melhorar','chart'),option('complementar','Quero construir uma alternativa','briefcase'),option('inicio','Ainda estou começando','sprout')] },
-  { id:'obstaculo',label:'O que falta hoje',title:'Qual é o maior obstáculo para começar?',description:'Escolha o que mais pesa na sua decisão.',options:[option('direcao','Não sei por onde começar','compass'),option('tempo','Tenho pouco tempo disponível','clock'),option('seguranca','Tenho receio de tentar e não conseguir','shield'),option('metodo','Ainda não encontrei um método claro','book'),option('consistencia','Tenho dificuldade em manter a constância','repeat')] },
-  { id:'conquista',label:'Seu próximo capítulo',title:'O que você gostaria de tornar possível?',description:'Imagine uma mudança que teria significado para você.',options:[option('familia','Uma vida melhor para minha família','heart'),option('liberdade','Mais autonomia sobre meu tempo','clock'),option('sonho','Um projeto que sempre deixei para depois','flag'),option('tranquilidade','Mais tranquilidade no dia a dia','shield')] },
-  { id:'objetivo',label:'Uma meta possível',title:'Qual seria uma boa primeira conquista?',description:'Vamos começar por um passo que faça sentido.',options:[option('entender','Entender o caminho e me organizar','book'),option('pratica','Sair da teoria e colocar em prática','zap'),option('resultado','Conseguir meu primeiro resultado','flag'),option('evoluir','Melhorar o que já estou fazendo','chart')] },
-  { id:'tempo',label:'O seu ritmo',title:'Quanto tempo você consegue reservar por dia?',description:'O importante é encontrar um ritmo que caiba na sua rotina.',options:[option('15-30','Entre 15 e 30 minutos','clock'),option('30-60','Entre 30 minutos e 1 hora','clock'),option('1-2h','Entre 1 e 2 horas','clock'),option('2h+','Mais de 2 horas','clock')] },
-  { id:'prontidao',label:'Quase lá',title:'Como você gostaria de seguir agora?',description:'Seu próximo passo pode começar pequeno.',options:[option('conhecer','Quero conhecer a proposta com calma','search'),option('orientacao','Quero uma orientação para começar','compass'),option('acao','Quero colocar em prática','zap')] },
+export type Option = {id:string;label:string;icon:string;description?:string};
+export type Question = {id:string;title:string;label:string;description:string;options:Option[]};
+const option = (id:string,label:string,icon:string,description?:string):Option => ({id,label,icon,description});
+export const questions:Question[] = [
+  {id:'momento',label:'Seu momento',title:'Hoje, de onde vem a sua renda?',description:'Uma nova fonte de renda precisa caber na sua vida atual.',options:[option('clt','Tenho um emprego e quero renda extra','briefcase'),option('autonomo','Trabalho por conta e quero ganhar mais','chart'),option('sem-renda','Estou buscando uma fonte de renda','search'),option('digital','Já trabalho no digital e quero uma nova rota','compass')]},
+  {id:'experiencia',label:'Sua experiência',title:'Você já tentou ganhar dinheiro pela internet?',description:'Se algo não funcionou antes, isso também faz parte do seu ponto de partida.',options:[option('primeira','Ainda não. Quero começar do zero','sprout'),option('tentativa','Já tentei, mas não consegui avançar','repeat'),option('aprendendo','Estou aprendendo e ainda falta clareza','book'),option('pratica','Já tenho experiência e quero diversificar','chart')]},
+  {id:'motivacao',label:'O que importa',title:'O que uma nova renda mudaria primeiro na sua vida?',description:'Pense na conquista que faria diferença de verdade.',options:[option('contas','Ter mais fôlego para as contas','shield'),option('familia','Dar mais conforto à minha família','heart'),option('liberdade','Depender menos de uma única renda','compass'),option('projeto','Tirar um plano pessoal do papel','flag')]},
+  {id:'obstaculo',label:'Sua maior barreira',title:'O que mais te trava na hora de começar?',description:'Vamos olhar para o que você precisa entender antes de dar o próximo passo.',options:[option('direcao','Não sei o que fazer primeiro','compass'),option('seguranca','Tenho receio de investir e me frustrar','shield'),option('tecnologia','A parte de tecnologia parece complicada','book'),option('tempo','Minha rotina já está cheia','clock')]},
+  {id:'exposicao',label:'Sem precisar aparecer',title:'Como você se sente em aparecer em vídeos?',description:'A proposta da Rota do Dólar não depende de transformar você em influenciador.',options:[option('privacidade','Prefiro trabalhar sem me expor','lock'),option('inseguro','Tenho vergonha ou insegurança','user'),option('indiferente','Não seria um problema para mim','check')]},
+  {id:'ia',label:'Uma nova ferramenta',title:'A inteligência artificial já faz parte da sua rotina?',description:'Você não precisa chegar sabendo tudo. Queremos saber por onde começar a explicação.',options:[option('zero','Ainda não usei','sprout'),option('curioso','Já ouvi falar, mas não sei usar','search'),option('ocasional','Uso de vez em quando','zap'),option('rotina','Já uso no trabalho ou nos estudos','book')]},
+  {id:'estrutura',label:'Seu ponto de partida',title:'O que você tem disponível para começar?',description:'A apresentação vai mostrar a estrutura e o que é necessário para utilizá-la.',options:[option('celular','Meu celular com internet','phone'),option('computador','Um computador com internet','monitor'),option('ambos','Celular e computador','check')]},
+  {id:'tempo',label:'Seu ritmo',title:'Quanto tempo você consegue reservar por dia?',description:'Escolha um ritmo possível para você manter. Aprender e colocar em prática exige dedicação.',options:[option('15-30','De 15 a 30 minutos','clock'),option('30-60','De 30 minutos a 1 hora','clock'),option('1-2h','De 1 a 2 horas','clock'),option('2h+','Mais de 2 horas','clock')]},
 ];
-export const PROCESS_STEP = questions.length + 1;
-export const STORY_STEP = questions.length + 2;
-export const RESULT_STEP = questions.length + 3;
-export const OFFER_STEP = questions.length + 4;
-export const stepNames = ['Abertura', ...questions.map(q=>q.label), 'Preparando resultado', 'Especialista', 'Seu próximo passo', 'Proposta'];
-export function getSuggestion(answers: Record<string,string>) {
-  if (answers.objetivo === 'evoluir') return { title:'Aprimorar o que você já começou', text:'Você quer evoluir. Seu primeiro passo pode ser organizar o que já funciona e escolher um ponto para melhorar.' };
-  if (answers.experiencia === 'primeira' || answers.objetivo === 'entender') return {title:'Clareza para começar',text:'Você está construindo seu ponto de partida. Conhecer o caminho e reservar um tempo na rotina pode ajudar a sair da intenção.'};
-  return {title:'Transformar intenção em prática',text:'Você já sabe que quer uma mudança. Escolher uma ação simples e repetir no seu ritmo pode ser um bom começo.'};
+export const PROCESS_STEP = questions.length+1;
+export const STORY_STEP = questions.length+2;
+export const RESULT_STEP = questions.length+3;
+export const OFFER_STEP = questions.length+4;
+export const stepNames = ['Abertura',...questions.map(q=>q.label),'Organizando respostas','Tiago Gomes','Sua rota','Apresentação'];
+export function getSuggestion(answers:Record<string,string>) {
+  const experience = answers.experiencia==='pratica'
+    ? {title:'Uma nova rota para quem já começou.',text:'Você já conhece o digital. Vale olhar para o modelo de agência com IA e entender como ele se diferencia do que você faz hoje.'}
+    : answers.experiencia==='tentativa'
+      ? {title:'Mais clareza para a sua próxima tentativa.',text:'Você já tentou antes. Na apresentação, foque no funcionamento da agência, nas tarefas do dia a dia e nas condições para receber comissões.'}
+      : {title:'Um começo que você consiga entender.',text:'Seu próximo passo é conhecer como a estrutura de agência com IA funciona e o que você precisa fazer. Uma explicação clara vem antes de qualquer decisão.'};
+  const priorities:Record<string,string>={direcao:'Comece pelo passo a passo: o que a agência faz e qual é a sua parte.',seguranca:'Observe as condições, os custos e os critérios de comissão antes de decidir.',tecnologia:'Veja a estrutura em uso e quais ferramentas você precisará aprender.',tempo:'Compare as tarefas da operação com o tempo que você consegue reservar.'};
+  const motivations:Record<string,string>={contas:'Mais fôlego para as contas',familia:'Mais conforto para sua família',liberdade:'Uma alternativa à renda atual',projeto:'Um plano pessoal saindo do papel'};
+  const device=answers.estrutura==='celular'?'Celular com internet':answers.estrutura==='computador'?'Computador com internet':'Celular e computador';
+  const time=questions.find(q=>q.id==='tempo')?.options.find(o=>o.id===answers.tempo)?.label||'Seu ritmo';
+  return {...experience,priority:priorities[answers.obstaculo]||priorities.direcao,goal:motivations[answers.motivacao]||'Uma nova fonte de renda',device,time,ai:answers.ia==='zero'||answers.ia==='curioso'?'IA explicada desde o início':'Aplicação prática da IA',privacy:answers.exposicao==='indiferente'?'Modelo sem depender de seguidores':'Uma proposta sem precisar aparecer'};
 }

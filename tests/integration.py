@@ -17,30 +17,30 @@ anon=client();expect(anon,'/api/admin',None,401)
 expect(anon,'/tiago-gomes/api/journey',{'action':'init'},403,'https://untrusted.example')
 expect(anon,'/tiago-gomes/api/journey',{'action':'init'},403,'https://4yousite.com.br.attacker.example')
 a=client();s=expect(a,'/tiago-gomes/api/journey',{'action':'init','source':'teste-integracao','device':'mobile'},201);assert s['step']==0
-expect(a,'/tiago-gomes/api/journey',{'action':'view','step':16},400)
-expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'compromisso','optionId':'sim'},400)
+expect(a,'/tiago-gomes/api/journey',{'action':'view','step':12},400)
+expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'momento','optionId':'clt'},400)
 expect(a,'/tiago-gomes/api/journey',{'action':'view','step':1})
-expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'compromisso','optionId':'invalid'},400)
+expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'momento','optionId':'invalid'},400)
 expect(a,'/tiago-gomes/api/journey',{'action':'view','step':2},400)
-answers=[('compromisso','sim'),('momento','clt'),('idade','26-35'),('experiencia','primeira'),('motivacao','familia'),('sentimento','curioso'),('satisfacao','melhorar'),('obstaculo','direcao'),('conquista','familia'),('objetivo','entender'),('tempo','30-60'),('prontidao','conhecer')]
+answers=[('momento','clt'),('experiencia','primeira'),('motivacao','familia'),('obstaculo','direcao'),('exposicao','privacidade'),('ia','zero'),('estrutura','celular'),('tempo','30-60')]
 for i,(q,o) in enumerate(answers):
  data=expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':q,'optionId':o});assert data['step']==i+2
-snapshot=expect(a,'/tiago-gomes/api/journey',None);assert snapshot['step']==13 and len(snapshot['answers'])==12
+snapshot=expect(a,'/tiago-gomes/api/journey',None);assert snapshot['step']==9 and len(snapshot['answers'])==8
 assert expect(a,'/tiago-gomes/api/journey',{'action':'init'})['answers']==snapshot['answers']
-for step in [14,15,16]:expect(a,'/tiago-gomes/api/journey',{'action':'view','step':step})
+for step in [10,11,12]:expect(a,'/tiago-gomes/api/journey',{'action':'view','step':step})
 expect(a,'/tiago-gomes/api/journey',{'action':'cta'});expect(a,'/tiago-gomes/api/journey',{'action':'cta'})
-expect(a,'/tiago-gomes/api/journey',{'action':'view','step':2})
+expect(a,'/tiago-gomes/api/journey',{'action':'view','step':1})
 expect(a,'/tiago-gomes/api/journey',{'action':'answer','questionId':'momento','optionId':'autonomo'})
 assert expect(a,'/tiago-gomes/api/journey',None)['answers']['momento']=='autonomo'
-b=client();expect(b,'/tiago-gomes/api/journey',{'action':'init','source':'teste-parcial'},201);expect(b,'/tiago-gomes/api/journey',{'action':'view','step':1});expect(b,'/tiago-gomes/api/journey',{'action':'answer','questionId':'compromisso','optionId':'explorar'})
-assert expect(b,'/tiago-gomes/api/journey',None)['answers']=={'compromisso':'explorar'}
+b=client();expect(b,'/tiago-gomes/api/journey',{'action':'init','source':'teste-parcial'},201);expect(b,'/tiago-gomes/api/journey',{'action':'view','step':1});expect(b,'/tiago-gomes/api/journey',{'action':'answer','questionId':'momento','optionId':'sem-renda'})
+assert expect(b,'/tiago-gomes/api/journey',None)['answers']=={'momento':'sem-renda'}
 # Documented starter mock sign-in, local only. No production auth bypass.
 admin=client();admin.open(BASE+'/signin-with-chatgpt?return_to=/admin').read()
 report=expect(admin,'/api/admin?range=all',None)
 assert report['totals']['completed']>=1 and report['totals']['cta']>=1
 our=next(s for s in report['sessions'] if s['source']=='teste-integracao')
 detail=expect(admin,'/api/admin?session='+our['id'],None)
-assert len(detail['answers'])==12
+assert len(detail['answers'])==8
 assert next(x for x in detail['answers'] if x['question_id']=='momento')['option_id']=='autonomo'
 assert len([x for x in report['choices'] if x['question_id']=='momento' and x['option_id']=='autonomo'])==1
 expect(admin,'/api/admin?range=invalid',None,400)
