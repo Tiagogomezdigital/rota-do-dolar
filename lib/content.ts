@@ -7,7 +7,7 @@ export const content = {
     eyebrow: 'COM TIAGO GOMES',
     title: 'Descubra como ganhar em dólar',
     highlight: 'sem precisar aparecer.',
-    description: 'Veja como trazer empresas para uma agência com IA já montada e gerar comissões em dólar. Pelo celular, sem gravar vídeos e mesmo começando do zero.',
+    description: 'Conheça uma estrutura pronta com inteligência artificial para começar a buscar comissões em dólar. Pelo celular, sem criar um produto e mesmo começando do zero.',
     cta: 'Quero conhecer essa rota',
     imageUrl: '/tiago-gomes/images/tiago-momentos-hero.png',
   },
