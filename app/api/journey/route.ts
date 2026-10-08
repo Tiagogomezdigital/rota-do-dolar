@@ -38,7 +38,7 @@ export async function POST(req:Request){
    if(target>s.furthest_step && target>1 && target<=PROCESS_STEP)return reply({error:'Responda antes de continuar.'},400);
    if(target>=STORY_STEP){const count=await db.prepare('SELECT COUNT(*) n FROM answers WHERE session_id=?').bind(s.id).first<{n:number}>();if(count?.n!==questions.length)return reply({error:'Conclua as perguntas antes de continuar.'},400);}
   }else if(body.action==='cta'){
-   if(!s.completed_at)return reply({error:'A proposta ainda não está disponível.'},400);
+   if(!s.completed_at)return reply({error:'Conclua as etapas antes de registrar interesse.'},400);
    await db.prepare('UPDATE sessions SET cta_clicked_at=COALESCE(cta_clicked_at,?),last_seen=? WHERE id=?').bind(now,now,s.id).run();return reply({ok:true});
   }else return reply({error:'Ação inválida.'},400);
   writes.push(db.prepare('UPDATE sessions SET current_step=?,furthest_step=MAX(furthest_step,?),last_seen=?,started_at=CASE WHEN ?>0 THEN COALESCE(started_at,?) ELSE started_at END,completed_at=CASE WHEN ?=? THEN COALESCE(completed_at,?) ELSE completed_at END WHERE id=?').bind(target,target,now,target,now,target,OFFER_STEP,now,s.id));
