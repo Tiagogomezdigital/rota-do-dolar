@@ -12,11 +12,13 @@ export const content = {
     description:'Sem conhecimento técnico, sem aparecer, sem investir em anúncios e sem precisar de seguidores',
     socialProof:'Mais de 1.840 pessoas já ativaram esse fluxo de comissões em dólar neste mês',
     cta:'QUERO RECEBER EM DÓLAR AGORA',
-    imageUrl:'/tiago-gomes/images/tiago-rota-do-dolar.png',
+    imageUrl:'/tiago-gomes/images/tiago-rota-do-dolar-1536.webp',
+    imageSrcSet:'/tiago-gomes/images/tiago-rota-do-dolar-576.webp 576w, /tiago-gomes/images/tiago-rota-do-dolar-960.webp 960w, /tiago-gomes/images/tiago-rota-do-dolar-1536.webp 1536w',
   },
   expert:{
     name:'Tiago Gomez', title:'MUITO PRAZER, MEU NOME É TIAGO GOMEZ',
-    imageUrl:'/tiago-gomes/images/tiago-momentos-hero.png',
+    imageUrl:'/tiago-gomes/images/tiago-momentos-hero-1536.webp',
+    imageSrcSet:'/tiago-gomes/images/tiago-momentos-hero-576.webp 576w, /tiago-gomes/images/tiago-momentos-hero-960.webp 960w, /tiago-gomes/images/tiago-momentos-hero-1536.webp 1536w',
     paragraphs:[
       'Quando você cresce vendo a dor de perto, a vida te obriga a escolher rápido: ser a vítima das circunstâncias ou o herói das próximas gerações. Eu escolhi lutar. Sem desculpas e sem negociar com o trabalho duro.',
       'O mercado digital me tirou da comunidade e me colocou no topo. Mas a verdadeira sabedoria veio de errar, consertar, descentralizar e construir um império que opera em diversas frentes no Brasil e lá fora, faturando milhões com inteligência e escala.',

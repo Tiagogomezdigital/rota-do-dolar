@@ -8,7 +8,9 @@ function visitor(){
  return async(body,expected=200,requestOrigin=origin)=>{
   const r=await fetch(`${origin}/tiago-gomes/api/journey`,{method:body?'POST':'GET',headers:{Cookie:cookie,Origin:requestOrigin,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
   if(r.headers.get('set-cookie')){assert.match(r.headers.get('set-cookie'),/HttpOnly/);cookie=r.headers.get('set-cookie').split(';')[0];}
-  const raw=await r.text();let data;try{data=JSON.parse(raw);}catch{data={message:raw.slice(0,120)};}assert.equal(r.status,expected,JSON.stringify(data));return data;
+  const raw=await r.text();let data;try{data=JSON.parse(raw);}catch{data={message:raw.slice(0,120)};}
+  if(Array.isArray(expected))assert.ok(expected.includes(r.status),`${r.status}: ${JSON.stringify(data)}`);else assert.equal(r.status,expected,JSON.stringify(data));
+  return data;
  };
 }
 const journey=visitor();
@@ -42,16 +44,43 @@ await journey({action:'view',step:4});
 await journey({action:'answer',questionId:'momento',optionId:'autonomo'});
 assert.equal((await journey()).answers.momento,'autonomo');
 assert.equal(Object.keys((await journey()).answers).length,12);
+const staleEdit=await journey({action:'answer',questionId:'momento',optionId:'clt',expectedStep:4},409);
+assert.equal(staleEdit.step,5);
+assert.equal(staleEdit.answers.momento,'autonomo');
+assert.equal(staleEdit.completed,true);
+await journey({action:'view',step:4,expectedStep:5});
+await journey({action:'answer',questionId:'momento',optionId:'clt',expectedStep:4});
+assert.equal((await journey()).answers.momento,'clt','Explicitly revisiting a question must still permit editing.');
 const declined=visitor();
 await declined({action:'init',source:'qa-recusou-20261023'},201);
 await declined({action:'view',step:1});
+await declined({action:'answer',questionId:'compromisso',optionId:'sim'});
+await declined({action:'view',step:1,expectedStep:2});
 assert.equal((await declined({action:'answer',questionId:'compromisso',optionId:'nao'})).step,DECLINED_STEP);
 assert.equal((await declined()).completed,false);
+const refusedInAnotherTab=await declined({action:'answer',questionId:'genero',optionId:'homem',expectedStep:2},409);
+assert.equal(refusedInAnotherTab.step,DECLINED_STEP);
+assert.equal(refusedInAnotherTab.answers.compromisso,'nao');
+assert.equal(refusedInAnotherTab.answers.genero,undefined);
+await declined({action:'view',step:2,expectedStep:2},409);
+await declined({action:'answer',questionId:'genero',optionId:'homem'},409);
+assert.equal((await declined()).step,DECLINED_STEP,'A stale tab must not undo the refusal or its metric.');
 await declined({action:'view',step:OFFER_STEP},400);
 await declined({action:'view',step:2},400);
-await declined({action:'view',step:1});
-assert.equal((await declined({action:'answer',questionId:'compromisso',optionId:'sim'})).step,2);
+await declined({action:'view',step:1,expectedStep:DECLINED_STEP});
+assert.equal((await declined({action:'answer',questionId:'compromisso',optionId:'sim',expectedStep:1})).step,2);
+const racing=visitor();
+await racing({action:'init',source:'qa-abas-concorrentes-20261023'},201);
+await racing({action:'view',step:1});
+await racing({action:'answer',questionId:'compromisso',optionId:'sim'});
+const raced=await Promise.all(['homem','mulher'].map(optionId=>racing({action:'answer',questionId:'genero',optionId,expectedStep:2},[200,409])));
+assert.equal(raced.filter(result=>!result.error).length,1,'Only one simultaneous answer may advance the same cursor.');
+assert.equal(raced.filter(result=>result.error).length,1);
+const raceSnapshot=await racing();
+assert.equal(raceSnapshot.step,3);
+assert.equal(Object.keys(raceSnapshot.answers).length,2);
+assert.equal(raced.find(result=>result.error).answers.genero,raceSnapshot.answers.genero,'Conflict must return the winning answer for UI resynchronization.');
 const admin=await fetch(`${origin}/api/admin`);
 assert.ok([401,403].includes(admin.status),'Admin must remain protected.');
 assert.equal((await fetch(`${origin}/tiago-gomes/obrigado`)).status,200);
-console.log('PASS: 12 answers, resume, edit, 7-second gate, refusal, CTA tracking, origin validation, admin protection and thank-you route.');
+console.log('PASS: 12 answers, resume, explicit edit, stale-tab resynchronization, transactional concurrent answers, refusal protection, 7-second gate, CTA tracking, origin validation, admin protection and thank-you route.');
