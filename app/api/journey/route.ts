@@ -1,5 +1,5 @@
 import {database} from '@/lib/database';
-import {CONTENT_VERSION,questions,OFFER_STEP,PROCESS_STEP,STORY_STEP} from '@/lib/content';
+import {CONTENT_VERSION,questions,OFFER_STEP,PROCESS_STEP,PROCESS_DURATION_MS,STORY_STEP,DECLINED_STEP} from '@/lib/content';
 export const dynamic='force-dynamic';
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
 const cookieName='journey_session';
@@ -28,7 +28,7 @@ export async function POST(req:Request){
   if(body.action==='answer'){
    const qi=questions.findIndex(q=>q.id===body.questionId);const question=questions[qi];
    if(!question||!question.options.some(o=>o.id===body.optionId)||qi+1>s.furthest_step)return reply({error:'Resposta inválida para esta etapa.'},400);
-   target=qi+2;
+   target=question.id==='compromisso'&&body.optionId==='nao'?DECLINED_STEP:qi+2;
    writes.push(db.prepare('INSERT INTO answers (session_id,question_id,option_id,answered_at) VALUES (?,?,?,?) ON CONFLICT(session_id,question_id) DO UPDATE SET option_id=excluded.option_id,answered_at=excluded.answered_at').bind(s.id,question.id,body.optionId,now));
   }else if(body.action==='view'){
    if(!Number.isInteger(body.step))return reply({error:'Etapa inválida.'},400);
@@ -36,12 +36,18 @@ export async function POST(req:Request){
    if(target<0||target>OFFER_STEP||target>s.furthest_step+1)return reply({error:'Etapa indisponível.'},400);
    // Question advancement requires an answer; revisits of already reached stages are allowed.
    if(target>s.furthest_step && target>1 && target<=PROCESS_STEP)return reply({error:'Responda antes de continuar.'},400);
-   if(target>=STORY_STEP){const count=await db.prepare('SELECT COUNT(*) n FROM answers WHERE session_id=?').bind(s.id).first<{n:number}>();if(count?.n!==questions.length)return reply({error:'Conclua as perguntas antes de continuar.'},400);}
+   if(target>=STORY_STEP){
+    const count=await db.prepare('SELECT COUNT(*) n FROM answers WHERE session_id=?').bind(s.id).first<{n:number}>();
+    const commitment=await db.prepare('SELECT option_id FROM answers WHERE session_id=? AND question_id=?').bind(s.id,'compromisso').first<{option_id:string}>();
+    if(count?.n!==questions.length||commitment?.option_id!=='sim')return reply({error:'Conclua as perguntas antes de continuar.'},400);
+    const processing=await db.prepare('SELECT first_seen FROM step_views WHERE session_id=? AND step=?').bind(s.id,PROCESS_STEP).first<{first_seen:number}>();
+    if(!processing||now-processing.first_seen<PROCESS_DURATION_MS)return reply({error:'Aguarde a preparação da sua jornada terminar.'},400);
+   }
   }else if(body.action==='cta'){
    if(!s.completed_at)return reply({error:'Conclua as etapas antes de registrar interesse.'},400);
    await db.prepare('UPDATE sessions SET cta_clicked_at=COALESCE(cta_clicked_at,?),last_seen=? WHERE id=?').bind(now,now,s.id).run();return reply({ok:true});
   }else return reply({error:'Ação inválida.'},400);
-  writes.push(db.prepare('UPDATE sessions SET current_step=?,furthest_step=MAX(furthest_step,?),last_seen=?,started_at=CASE WHEN ?>0 THEN COALESCE(started_at,?) ELSE started_at END,completed_at=CASE WHEN ?=? THEN COALESCE(completed_at,?) ELSE completed_at END WHERE id=?').bind(target,target,now,target,now,target,OFFER_STEP,now,s.id));
+  writes.push(db.prepare('UPDATE sessions SET current_step=?,furthest_step=MAX(furthest_step,?),last_seen=?,started_at=CASE WHEN ?>0 THEN COALESCE(started_at,?) ELSE started_at END,completed_at=CASE WHEN ?=? THEN COALESCE(completed_at,?) ELSE completed_at END WHERE id=?').bind(target,target===DECLINED_STEP?1:target,now,target,now,target,OFFER_STEP,now,s.id));
   writes.push(db.prepare('INSERT OR IGNORE INTO step_views (session_id,step,first_seen) VALUES (?,?,?)').bind(s.id,target,now));
   await db.batch(writes);return reply({ok:true,step:target});
  }catch(e){console.error('journey write failed',e);return reply({error:'Não conseguimos salvar agora. Sua escolha está mantida; tente novamente.'},503);}
