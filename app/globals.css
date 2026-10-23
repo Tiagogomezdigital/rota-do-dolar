@@ -247,3 +247,49 @@
   .trophy-callout{padding:20px 16px;gap:13px}.trophy-callout svg{width:28px}.trophy-callout strong{font-size:13px}
   .thanks-page{padding:20px 16px}.thanks-container h1{padding:18px 15px;letter-spacing:-.5px}
 }
+
+/* Small illustrated moments carry the Rota do Dólar identity through the quiz. */
+.question-kicker{display:flex;align-items:center;justify-content:center;gap:6px;margin:-9px 0 14px}
+.question-kicker .quiz-illustration{width:38px;height:38px}
+.question-kicker .step-label{margin:0;text-align:left}
+.script-quiz .answer{padding:14px 18px;gap:14px;min-height:82px;transition:border-color .18s,background-color .18s,box-shadow .18s}
+.script-quiz .answer-icon,.script-quiz .commitment-answers .answer-icon{width:48px;height:48px;flex:0 0 48px}
+.script-quiz .answer-label{min-width:0}
+.script-quiz .answer-icon .quiz-illustration{width:48px;height:48px;transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.script-quiz .answer:has([data-state=checked]){border-color:#c6a52c;background:#fffbed;box-shadow:0 2px 0 #e6ca6b38}
+.script-quiz .answer:has([data-state=checked]) .quiz-illustration{transform:translateY(-2px) rotate(-4deg)}
+.script-quiz .answer:focus-within .quiz-illustration{transform:translateY(-2px) rotate(-4deg)}
+.gift-intro{position:relative;overflow:hidden;padding:22px 24px;margin-bottom:26px;background:radial-gradient(ellipse at 50% 0,#fff0b6 0,transparent 62%),#fffcf0}
+.gift-art{display:flex;justify-content:center;margin:-7px auto 9px}
+.gift-art .quiz-illustration{width:80px;height:80px;animation:gift-arrive .6s cubic-bezier(.2,.8,.2,1) both}
+.gift-intro h2{font-size:23px;line-height:1.28;margin-bottom:15px}
+.social-proof-art{width:30px;height:30px;flex:0 0 30px;margin-top:-4px}
+.social-proof-art .quiz-illustration{width:30px;height:30px}
+.script-quiz .social-proof .quiz-illustration{margin:0}
+.processing-meter>span{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px}
+.processing-meter strong{font-size:29px;line-height:1.1;font-weight:750}
+.processing-meter .quiz-illustration{width:55px;height:55px;animation:route-hover 2.4s ease-in-out 3}
+.processing-checks>div{transition:background-color .25s,color .25s,border-color .25s}
+.processing-checks>div.done>svg{animation:route-check .3s ease-out both}
+.access-banner>.quiz-illustration{width:64px;height:64px;flex:0 0 64px}
+.trophy-callout>.quiz-illustration{width:82px;height:82px;flex:0 0 82px}
+.trophy-callout .quiz-illustration svg{width:100%;height:100%}
+.video-placeholder>.quiz-illustration{width:96px;height:96px;margin-bottom:-2px}
+@media(hover:hover){
+  .script-quiz .answer:hover{border-color:#d9bd54;background:#fffdf5;box-shadow:0 4px 14px #a48a2920}
+  .script-quiz .answer:hover .quiz-illustration{transform:translateY(-3px) rotate(-5deg)}
+}
+@media(max-width:760px){
+  .script-quiz .answer{padding:12px 14px;gap:12px;min-height:78px}
+  .script-quiz .commitment-answers .answer{padding:12px 14px}
+  .gift-intro{padding:20px;margin-bottom:24px}
+  .gift-intro h2{font-size:21px}
+  .gift-art .quiz-illustration{width:72px;height:72px}
+  .question-kicker{margin-top:-6px;margin-bottom:12px}
+  .access-banner{padding:18px 16px;gap:12px}
+  .access-banner>.quiz-illustration{width:54px;height:54px;flex-basis:54px}
+  .trophy-callout>.quiz-illustration{width:64px;height:64px;flex-basis:64px}
+}
+@keyframes gift-arrive{from{opacity:0;transform:translateY(8px) rotate(-9deg) scale(.88)}to{opacity:1;transform:none}}
+@keyframes route-hover{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
+@keyframes route-check{from{opacity:.4;transform:scale(.65)}to{opacity:1;transform:scale(1)}}

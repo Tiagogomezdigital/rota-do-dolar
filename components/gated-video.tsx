@@ -1,6 +1,7 @@
 'use client';
 import {useState} from 'react';
-import {LockKeyhole,PlayCircle} from 'lucide-react';
+import {LockKeyhole} from 'lucide-react';
+import {QuizIllustration} from '@/components/quiz-illustration';
 import {type VideoConfig} from '@/lib/content';
 import {getVideoProgress,type VideoProgress} from '@/lib/video-progress';
 type Props={config:VideoConfig;title:string;cta:string;onContinue:()=>void;busy?:boolean;vertical?:boolean};
@@ -22,7 +23,7 @@ function VideoSession({config,title,cta,onContinue,busy=false,vertical=false}:Pr
   return <div className="gated-video">
     {configured?<div className={`video-frame ${vertical?'vertical':''}`}>
       {config.src?<video aria-label={title} controls playsInline preload="metadata" src={config.src} onError={()=>setMediaError(true)} onTimeUpdate={e=>{if(!e.currentTarget.paused&&!e.currentTarget.seeking)playback(e.currentTarget);}} onEnded={e=>playback(e.currentTarget)}/>:<iframe title={title} src={config.embedUrl} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen/>}
-    </div>:<div className={`video-placeholder ${vertical?'vertical':''}`}><PlayCircle size={42} aria-hidden="true"/><strong>{title}</strong><p>A aula estará disponível aqui em breve.</p></div>}
+    </div>:<div className={`video-placeholder ${vertical?'vertical':''}`}><QuizIllustration name="play" size="large"/><strong>{title}</strong><p>A aula estará disponível aqui em breve.</p></div>}
     {mediaError&&<p className="error" role="alert">Não foi possível carregar o vídeo. Tente novamente em instantes.</p>}
     {unlocked&&!mediaError?<><p className="unlock-note">Após assistir ao vídeo, aperte no botão abaixo para continuar.</p><button className="cta" disabled={busy} onClick={onContinue}>{busy?'Abrindo…':cta}</button></>:<p className="micro video-gate-note"><LockKeyhole size={14}/>{configured?'O botão será liberado durante a aula.':'Assim que a aula estiver disponível, você poderá continuar por aqui.'}</p>}
     {configured&&<span className="sr-only" role="status">{unlocked?'Botão liberado':`${Math.floor(watched)} segundos assistidos`}</span>}
