@@ -1,5 +1,7 @@
 import {database} from '@/lib/database';
+import {env} from 'cloudflare:workers';
 import {CONTENT_VERSION,questions,OFFER_STEP,PROCESS_STEP,PROCESS_DURATION_MS,STORY_STEP,DECLINED_STEP} from '@/lib/content';
+import {isJourneyOriginAllowed,journeyMigrationResponse,type JourneyMigrationSettings} from '@/lib/journey-migration';
 export const dynamic='force-dynamic';
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
 const cookieName='journey_session';
@@ -9,14 +11,20 @@ const reply=(data:unknown,status=200,extra={})=>Response.json(data,{status,heade
 async function find(req:Request){const id=sid(req);return id?database().prepare('SELECT * FROM sessions WHERE id = ? AND content_version = ?').bind(id,CONTENT_VERSION).first<Session>():null;}
 async function snapshot(session:Session){const rows=await database().prepare('SELECT question_id,option_id FROM answers WHERE session_id = ?').bind(session.id).all<{question_id:string;option_id:string}>();return {step:session.current_step,answers:Object.fromEntries(rows.results.map(r=>[r.question_id,r.option_id])),completed:!!session.completed_at,ctaClicked:!!session.cta_clicked_at};}
 async function conflict(req:Request){const current=await find(req);return reply({error:'Sua jornada foi atualizada em outra aba. Continue a partir da etapa atual.',...(current?await snapshot(current):{})},409);}
-export async function GET(req:Request){try{const s=await find(req);return reply(s?await snapshot(s):{step:0,answers:{},completed:false,ctaClicked:false});}catch(e){console.error('journey read failed',e);return reply({error:'Não foi possível recuperar seu progresso. Tente novamente.'},503);}}
+function migrationSettings():JourneyMigrationSettings{
+ if(process.env.QUIZ_RUNTIME||process.env.VERCEL)return {isSitesRuntime:false};
+ const flags=env as {JOURNEY_FORWARD_ORIGIN?:unknown;JOURNEY_WRITE_PAUSED?:unknown};
+ return {isSitesRuntime:true,forwardOrigin:flags.JOURNEY_FORWARD_ORIGIN,writePaused:flags.JOURNEY_WRITE_PAUSED};
+}
+export async function GET(req:Request){try{const forwarded=await journeyMigrationResponse(req,migrationSettings());if(forwarded)return forwarded;const s=await find(req);return reply(s?await snapshot(s):{step:0,answers:{},completed:false,ctaClicked:false});}catch(e){console.error('journey read failed',e);return reply({error:'Não foi possível recuperar seu progresso. Tente novamente.'},503);}}
 export async function POST(req:Request){
  try{
-  const origin=req.headers.get('origin');if(!origin||![new URL(req.url).origin,'https://4yousite.com.br','https://www.4yousite.com.br'].includes(origin))return reply({error:'Origem não permitida.'},403);
+  if(!isJourneyOriginAllowed(req))return reply({error:'Origem não permitida.'},403);
   if(!req.headers.get('content-type')?.includes('application/json'))return reply({error:'Formato inválido.'},415);
   const raw=await req.text();if(raw.length>2048)return reply({error:'Requisição muito grande.'},413);
   let body:Record<string,unknown>;try{body=JSON.parse(raw);}catch{return reply({error:'Requisição inválida.'},400);}
   if(!body||Array.isArray(body)||typeof body!=='object')return reply({error:'Requisição inválida.'},400);
+  const forwarded=await journeyMigrationResponse(req,migrationSettings(),raw);if(forwarded)return forwarded;
   const db=database(),now=Date.now();let s=await find(req);
   if(body.action==='init'){
    if(s)return reply(await snapshot(s));

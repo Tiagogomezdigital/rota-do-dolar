@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import {getVerifiedAdminSession,isVercelAuthRuntime,safeAdminReturnPath} from '@/lib/auth';
 
 export type ChatGPTUser = {
   userId: string;
@@ -20,6 +21,12 @@ const CALLBACK_PATH = "/callback";
 
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const requestHeaders = await headers();
+  if(isVercelAuthRuntime()){
+    const session=await getVerifiedAdminSession(requestHeaders);
+    if(!session)return null;
+    return {userId:session.user.id,displayName:session.user.name||session.user.email,email:session.user.email,fullName:session.user.name||null};
+  }
+  // Only the original Sites dispatcher may supply these identity headers.
   const userId = requestHeaders.get(USER_ID_HEADER);
   const email = requestHeaders.get(USER_EMAIL_HEADER);
   if (!userId || !email) return null;
@@ -49,11 +56,13 @@ export async function requireChatGPTUser(
 }
 
 export function chatGPTSignInPath(returnTo: string): string {
+  if(isVercelAuthRuntime())return `/admin/login?return_to=${encodeURIComponent(safeAdminReturnPath(returnTo))}`;
   const safeReturnTo = safeRelativeReturnPath(returnTo);
   return `${SIGN_IN_PATH}?return_to=${encodeURIComponent(safeReturnTo)}`;
 }
 
 export function chatGPTSignOutPath(returnTo = "/"): string {
+  if(isVercelAuthRuntime())return `/admin/logout?return_to=${encodeURIComponent(safeAdminReturnPath(returnTo))}`;
   const safeReturnTo = safeRelativeReturnPath(returnTo);
   return `${SIGN_OUT_PATH}?return_to=${encodeURIComponent(safeReturnTo)}`;
 }

@@ -1,0 +1,15 @@
+.git
+.openai
+.sites-runtime
+.agents
+.codex
+.wrangler
+.vinext
+.next
+dist
+node_modules
+outputs
+work
+.env*
+!.env.example
+.dev.vars*
