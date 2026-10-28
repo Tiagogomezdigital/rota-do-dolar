@@ -98,7 +98,8 @@ async function verify(client,tables){
     const definition=definitions[name],expected=new Map(tables[name].map(row=>[keyOf(row,definition),row]));
     const count=await client.execute(`SELECT COUNT(*) n FROM ${name}`);counts[name]=Number(count.rows[0].n);
     if(counts[name]<tables[name].length||!options['--allow-extra-target-rows']&&counts[name]!==tables[name].length)throw new Error(`Count mismatch in ${name}; no existing target rows were deleted.`);
-    for(const rows of chunks(tables[name])){
+    // Turso limits expression depth to 100; compound primary-key OR predicates need smaller batches.
+    for(const rows of chunks(tables[name],25)){
       const predicate=rows.map(()=>`(${definition.key.map(column=>`${column}=?`).join(' AND ')})`).join(' OR ');
       const result=await client.execute({sql:`SELECT ${definition.columns.join(',')} FROM ${name} WHERE ${predicate}`,args:rows.flatMap(row=>definition.key.map(column=>row[column]))});
       if(result.rows.length!==rows.length)throw new Error(`Missing imported records in ${name}.`);
