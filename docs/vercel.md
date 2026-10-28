@@ -10,6 +10,12 @@ O mesmo código suporta a origem Sites existente e Next.js na Vercel. A migraç�
 - Build: `npm run build:vercel`.
 - Desenvolvimento local: `npm run dev:vercel`.
 
+## Código e publicação pelo GitHub
+
+O código fica no repositório privado [Tiagogomezdigital/rota-do-dolar](https://github.com/Tiagogomezdigital/rota-do-dolar), conectado a este projeto Vercel. A ramificação de produção é `main`. Pushes nessa ramificação iniciam a publicação; ramificações de trabalho podem gerar previews para revisão. As credenciais permanecem nos ambientes da Vercel, sem tokens de deploy no repositório.
+
+Para retomar em outro computador, clone com uma conta autorizada e siga `README.md` e `AGENTS.md`. Confirme o projeto existente antes de buscar variáveis de Development. Uma nova máquina não exige recriar banco, domínio, projeto ou executar importações.
+
 Antes de qualquer operação remota, confira a identidade do CLI e o projeto vinculado. Credenciais e arquivos `.env.local` permanecem ignorados pelo Git. O conector Vercel de outra conta não deve ser usado para modificar este projeto.
 
 ## Banco

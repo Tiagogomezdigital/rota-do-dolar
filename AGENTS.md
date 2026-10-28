@@ -31,7 +31,7 @@ Não execute importadores, scripts de esquema, migrações ou alterações de DN
 
 ## Publicação e legado
 
-Quando o GitHub estiver conectado à Vercel, um push na ramificação de produção pode iniciar deploy automático. Confira a configuração Git e o escopo autorizado antes do push; não envie à produção apenas para experimentar.
+O GitHub está conectado à Vercel e `main` é a ramificação de produção. Um push em `main` inicia deploy automático. Confira a configuração Git e o escopo autorizado antes do push; não envie à produção apenas para experimentar.
 
 Os scripts genéricos `dev`, `build` e `start`, as dependências Cloudflare e `.openai/hosting.json` atendem ao runtime Sites histórico. Não são a publicação principal. A origem antiga e o D1 foram preservados para recuperação; a ponte da API mantém links antigos gravando no banco atual. Não apague, desative ou republique esse legado por limpeza incidental.
 

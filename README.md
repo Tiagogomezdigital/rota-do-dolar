@@ -65,7 +65,7 @@ npm run build:vercel
 
 Use os testes existentes conforme a alteração. `scripts/check-video-progress.mjs` verifica a liberação por reprodução e `scripts/check-libsql-adapter.mjs` usa SQLite temporário local. `scripts/check-quiz.mjs` precisa de servidor local com o banco TEST e grava sessões de QA nesse ambiente. Não aponte testes de gravação para produção.
 
-Após concluir o vínculo GitHub/Vercel, pushes na ramificação de produção podem publicar automaticamente. Confira a configuração Git do projeto antes de enviar alterações. Use uma ramificação de trabalho e preview quando a mudança precisar de revisão. As variáveis e integrações existentes são mantidas na Vercel; não adicione tokens de deploy ao repositório.
+O repositório `Tiagogomezdigital/rota-do-dolar` está conectado ao projeto Vercel existente. A ramificação de produção é `main`: um push nela inicia a publicação pela integração Git. Confira a configuração Git do projeto antes de enviar alterações. Use uma ramificação de trabalho e preview quando a mudança precisar de revisão. As variáveis e integrações existentes são mantidas na Vercel; não adicione tokens de deploy ao repositório.
 
 O fluxo principal usa `dev:vercel`, `build:vercel` e `start:vercel`. Os scripts genéricos `dev`, `build` e `start` foram preservados para o runtime Sites antigo e não são o fluxo principal desta hospedagem. A operação detalhada está em [docs/vercel.md](docs/vercel.md).
 
