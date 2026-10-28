@@ -36,8 +36,13 @@ yarn-error.log*
 
 # typescript
 next-env.d.ts
+*.tsbuildinfo
 /dist/
 /.wrangler/
+
+# Visitor data and local migration backups stay outside source control.
+/private/
+/backups/
 # Checkout-local execution profile and tool state; never publish them.
 /.sites-runtime/
 /.agents/
