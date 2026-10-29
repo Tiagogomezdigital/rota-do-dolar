@@ -51,7 +51,7 @@ Permanecem anotados para solicitar:
 - Link ou código do vídeo de obrigado e minuto/segundo para liberar a afiliação.
 - Foto real de Tiago com Karen e Maluzinha.
 
-A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. O botão de afiliação na página de obrigado permanece oculto até configurar seu vídeo e tempo de liberação. Abrir a página de obrigado não comprova pagamento.
+A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. A página `/obrigado` usa fundo preto, headline na faixa vermelha e placeholder vertical. Por solicitação do usuário, o botão de afiliação está visível enquanto o embed e o timing estão pendentes (`content.thanks.showButtonImmediately`). Ao integrar a VSL definitiva, desative essa opção e configure a liberação por reprodução. O alias `/tiago-gomes/obrigado` continua disponível. Abrir a página de obrigado não comprova pagamento.
 
 ## Validação e publicação
 

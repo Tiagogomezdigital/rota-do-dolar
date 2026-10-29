@@ -53,6 +53,8 @@ export const content = {
     notice:{text:'Após assistir o vídeo, aperte no botão abaixo, antes que as',emphasis:'vagas encerrem...'},
   },
   thanks:{
+    // Aprovação visual solicitada: o botão aparece enquanto o embed e o pitch estão pendentes.
+    showButtonImmediately:true,
     title:'IMPORTANTE: ESTA AULA SÓ ESTÁ DISPONÍVEL AQUI',
     video:{src:'',embedUrl:'',revealAtSeconds:null} as VideoConfig,
     destination:'https://affiliates.express/rotadodolar', cta:'LIBERAR AFILIAÇÃO NA WIX',
