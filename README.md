@@ -1,6 +1,6 @@
 # Rota do Dólar
 
-Landing page exclusiva com uma jornada de 12 perguntas, apresentação do especialista, resultado e VSL. O visitante pode retomar o progresso e revisar escolhas. O painel administrativo reúne respostas, funil e percursos individuais.
+Landing page exclusiva com uma jornada de 12 perguntas, apresentação do especialista, resultado e VSL. O visitante pode retomar o progresso salvo. O painel administrativo reúne respostas, funil e percursos individuais.
 
 ## Produção
 
@@ -48,11 +48,10 @@ A montagem de viagens, família, carro e trabalho é ilustrativa. As notificaç�
 
 Permanecem anotados para solicitar:
 
-- Link ou código da VSL principal e minuto/segundo exatos do pitch para liberar o checkout.
 - Link ou código do vídeo de obrigado e minuto/segundo para liberar a afiliação.
 - Foto real de Tiago com Karen e Maluzinha.
 
-Os botões correspondentes ficam ocultos enquanto faltam vídeo e tempo. A liberação deve acompanhar a reprodução real do vídeo, conforme o roteiro. Abrir a página de obrigado não comprova pagamento.
+A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. O botão de afiliação na página de obrigado permanece oculto até configurar seu vídeo e tempo de liberação. Abrir a página de obrigado não comprova pagamento.
 
 ## Validação e publicação
 
