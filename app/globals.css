@@ -1,6 +1,18 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @import "tw-animate-css";
 @import "../vendor/shadcn-tailwind-4.13.0.css";
+
+/* Only shipped screens and their controls contribute utility CSS. */
+@source "./**/*.{ts,tsx}";
+@source "../components/*.tsx";
+@source "../components/ui/button.tsx";
+@source "../components/ui/tabs.tsx";
+@source "../components/ui/select.tsx";
+@source "../components/ui/table.tsx";
+@source "../components/ui/sheet.tsx";
+@source "../components/ui/empty.tsx";
+@source "../components/ui/skeleton.tsx";
+@source "../components/ui/pagination.tsx";
 
 @utility scrollbar-thin {
   scrollbar-width: thin;
@@ -274,6 +286,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}*{box-sizing:border-box
 }
 
 /* Native emojis share consistent sizing across quiz screens. */
+.quiz-radio-input{-webkit-appearance:none;appearance:none;margin:0;display:block;cursor:inherit}
+.script-quiz .quiz-radio-control{color:#169b47}
 .quiz-illustration{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:48px;height:48px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:32px;font-weight:400;line-height:1;vertical-align:middle}
 .quiz-illustration--large{width:96px;height:96px;font-size:64px}
 .question-kicker{display:flex;align-items:center;justify-content:center;gap:6px;margin:-9px 0 14px}

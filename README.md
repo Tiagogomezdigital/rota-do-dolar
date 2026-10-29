@@ -68,6 +68,45 @@ O repositório `Tiagogomezdigital/rota-do-dolar` está conectado ao projeto Verc
 
 O fluxo principal usa `dev:vercel`, `build:vercel` e `start:vercel`. Os scripts genéricos `dev`, `build` e `start` foram preservados para o runtime Sites antigo e não são o fluxo principal desta hospedagem. A operação detalhada está em [docs/vercel.md](docs/vercel.md).
 
+## Auditoria de performance e regressão
+
+O [relatório de 29/10/2026](docs/auditoria-performance-2026-10-29.md) registra o ambiente, a comparação antes/depois, a integridade da jornada e os limites dos testes. Não use resultados de localhost como promessa de capacidade da Vercel.
+
+Verificações locais sem servidor:
+
+```sh
+node scripts/check-journey-client.mjs
+node scripts/check-request-body.mjs
+node scripts/check-backend-log.mjs
+node scripts/check-video-progress.mjs
+node scripts/check-journey-migration.mjs
+node scripts/check-libsql-adapter.mjs
+```
+
+Com o servidor local ligado exclusivamente ao banco TEST, configure `QUIZ_TEST_ORIGIN`. Os testes de navegador usam Playwright já disponível no ambiente ou indicado em `QUIZ_PLAYWRIGHT_MODULE`; `QUIZ_CHROME_PATH` permite escolher um executável Chrome. Eles usam perfis isolados, não o perfil pessoal. Sessões de QA ficam no banco TEST e não são apagadas automaticamente.
+
+```sh
+node scripts/check-quiz.mjs
+node scripts/check-quiz-browser.mjs after --confirm-test-database
+node scripts/check-quiz-browser-resilience.mjs --confirm-test-database
+node scripts/check-quiz-player.mjs --confirm-test-database
+node scripts/compare-quiz-visuals.mjs
+node scripts/check-quiz-load.mjs --confirm-test-database --visitors=12 --concurrency=3
+```
+
+O teste do player acessa o embed real da VTurb; os demais testes críticos também cobrem a indisponibilidade do vídeo. Nenhum teste realiza compras. O teste de carga aceita somente um servidor local, limita o número de visitantes e não mede autoscaling de produção.
+
+Instale Lighthouse fora das dependências da aplicação e execute as medições sem builds ou outros testes concorrentes:
+
+```sh
+npm install --prefix outputs/perf-tools --no-save --package-lock=false lighthouse@13.6.0
+node scripts/measure-quiz-performance.mjs --phase baseline --url http://localhost:5190/ --confirm-test-db
+```
+
+Use uma fase nova por medição; o runner não sobrescreve evidências. Relatórios e capturas ficam em `outputs/`, ignorado pelo Git e pela Vercel. Para medir a build de produção local, mantenha `VERCEL_ENV=development` e use `BETTER_AUTH_URL` igual à URL local apenas nesse processo; isso permite testar o bloqueio administrativo sem alterar os hosts permitidos em produção. Consulte o relatório para os comandos completos em PowerShell.
+
+`scripts/optimize-quiz-images.mjs` gera AVIFs com hash a partir dos PNGs originais. Ao mudar uma imagem, atualize os caminhos em `lib/content.ts`; não sobrescreva um arquivo publicado com hash. Os WebPs permanecem como fallback.
+
 ## Dados e origem antiga
 
 As tabelas do quiz são `sessions`, `answers` e `step_views`; o login usa tabelas `auth_*`. Gravações condicionais e transações protegem respostas de abas concorrentes. Vale a resposta mais recente após uma revisão explícita; clique no checkout não é compra confirmada.

@@ -5,6 +5,11 @@ const vercelTarget = process.env.QUIZ_RUNTIME === "vercel" || process.env.VERCEL
 
 const nextConfig: NextConfig = {
   ...(vercelTarget ? {
+    outputFileTracingRoot:process.cwd(),
+    async headers(){return [
+      {source:'/tiago-gomes/images/optimized/:path*',headers:[{key:'Cache-Control',value:'public, max-age=31536000, immutable'}]},
+      {source:'/assets/:path*',headers:[{key:'Cache-Control',value:'public, max-age=3600, stale-while-revalidate=86400'}]},
+    ];},
     turbopack: { resolveAlias: { "cloudflare:workers": "./lib/cloudflare-next.ts" } },
     webpack(config, {webpack}) {
       config.plugins.push(new webpack.NormalModuleReplacementPlugin(

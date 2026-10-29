@@ -1,0 +1,431 @@
+{
+  "baselineCommit": "fac9fc20f7ba11565603f902948fec218a8fc555",
+  "branch": "codex/performance-audit",
+  "date": "2026-10-29",
+  "environment": {
+    "scope": "local production build, TEST database, no production load or deployment",
+    "node": "24.15.0",
+    "chrome": "156.0.0.0",
+    "lighthouse": "13.6.0",
+    "mobile": {
+      "width": 412,
+      "height": 823,
+      "dpr": 1.75,
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "cpuSlowdown": 4
+    },
+    "desktop": {
+      "width": 1350,
+      "height": 940,
+      "dpr": 1,
+      "rttMs": 40,
+      "throughputKbps": 10240,
+      "cpuSlowdown": 1
+    },
+    "method": "3 sequential mobile audits, 1 desktop audit, fresh profiles, default simulated throttling, no request blocking"
+  },
+  "before": [
+    {
+      "mode": "mobile",
+      "index": 1,
+      "version": "13.6.0",
+      "performance": 89,
+      "accessibility": 100,
+      "lcp": 3628.7355000000002,
+      "fcp": 995.742,
+      "cls": 0,
+      "tbt": 111,
+      "transfer": 628990,
+      "requests": 20,
+      "scriptTransfer": 412524,
+      "errors": null
+    },
+    {
+      "mode": "mobile",
+      "index": 2,
+      "version": "13.6.0",
+      "performance": 85,
+      "accessibility": 100,
+      "lcp": 4385.6108,
+      "fcp": 908.8342,
+      "cls": 0,
+      "tbt": 43,
+      "transfer": 628990,
+      "requests": 20,
+      "scriptTransfer": 412525,
+      "errors": null
+    },
+    {
+      "mode": "mobile",
+      "index": 3,
+      "version": "13.6.0",
+      "performance": 84,
+      "accessibility": 100,
+      "lcp": 4419.2423,
+      "fcp": 909.6723,
+      "cls": 0,
+      "tbt": 78,
+      "transfer": 628988,
+      "requests": 20,
+      "scriptTransfer": 412523,
+      "errors": null
+    },
+    {
+      "mode": "desktop",
+      "index": 1,
+      "version": "13.6.0",
+      "performance": 100,
+      "accessibility": 100,
+      "lcp": 688.5516,
+      "fcp": 248.5516,
+      "cls": 0,
+      "tbt": 0,
+      "transfer": 628991,
+      "requests": 20,
+      "scriptTransfer": 412525,
+      "errors": null
+    }
+  ],
+  "after": [
+    {
+      "mode": "mobile",
+      "index": 1,
+      "version": "13.6.0",
+      "performance": 97,
+      "accessibility": 100,
+      "lcp": 2444.0335,
+      "fcp": 922.0335,
+      "cls": 0,
+      "tbt": 116.49162499999989,
+      "transfer": 255430,
+      "requests": 13,
+      "scriptTransfer": 150021,
+      "bestPractices": 100,
+      "ttfb": 461,
+      "serverResponseTime": 102,
+      "fetchTime": "2026-10-29T08:46:30.305Z",
+      "errors": null
+    },
+    {
+      "mode": "mobile",
+      "index": 2,
+      "version": "13.6.0",
+      "performance": 97,
+      "accessibility": 100,
+      "lcp": 2416.1549,
+      "fcp": 912.1549,
+      "cls": 0,
+      "tbt": 100.96127499999989,
+      "transfer": 255430,
+      "requests": 13,
+      "scriptTransfer": 150021,
+      "bestPractices": 100,
+      "ttfb": 456,
+      "serverResponseTime": 7,
+      "fetchTime": "2026-10-29T08:46:40.496Z",
+      "errors": null
+    },
+    {
+      "mode": "mobile",
+      "index": 3,
+      "version": "13.6.0",
+      "performance": 97,
+      "accessibility": 100,
+      "lcp": 2407.6189999999997,
+      "fcp": 907.6189999999999,
+      "cls": 0,
+      "tbt": 96.59524999999985,
+      "transfer": 255430,
+      "requests": 13,
+      "scriptTransfer": 150021,
+      "bestPractices": 100,
+      "ttfb": 454,
+      "serverResponseTime": 3,
+      "fetchTime": "2026-10-29T08:46:49.402Z",
+      "errors": null
+    },
+    {
+      "mode": "desktop",
+      "index": 1,
+      "version": "13.6.0",
+      "performance": 100,
+      "accessibility": 100,
+      "lcp": 526.871,
+      "fcp": 246.87099999999998,
+      "cls": 0,
+      "tbt": 0,
+      "transfer": 255430,
+      "requests": 13,
+      "scriptTransfer": 150021,
+      "bestPractices": 100,
+      "ttfb": 123,
+      "serverResponseTime": 3,
+      "fetchTime": "2026-10-29T08:46:57.936Z",
+      "errors": null
+    }
+  ],
+  "mobileMedians": [
+    {
+      "metric": "performance",
+      "before": 85,
+      "after": 97,
+      "delta": 12,
+      "percent": 14.117647058823524
+    },
+    {
+      "metric": "accessibility",
+      "before": 100,
+      "after": 100,
+      "delta": 0,
+      "percent": 0
+    },
+    {
+      "metric": "lcp",
+      "before": 4385.6108,
+      "after": 2416.1549,
+      "delta": -1969.4559000000004,
+      "percent": -44.90722022118333
+    },
+    {
+      "metric": "fcp",
+      "before": 909.6723,
+      "after": 912.1549,
+      "delta": 2.4826000000000477,
+      "percent": 0.2729114649308473
+    },
+    {
+      "metric": "cls",
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "percent": null
+    },
+    {
+      "metric": "tbt",
+      "before": 78,
+      "after": 100.96127499999989,
+      "delta": 22.961274999999887,
+      "percent": 29.4375320512819
+    },
+    {
+      "metric": "transfer",
+      "before": 628990,
+      "after": 255430,
+      "delta": -373560,
+      "percent": -59.390451358527166
+    },
+    {
+      "metric": "requests",
+      "before": 20,
+      "after": 13,
+      "delta": -7,
+      "percent": -35
+    },
+    {
+      "metric": "scriptTransfer",
+      "before": 412524,
+      "after": 150021,
+      "delta": -262503,
+      "percent": -63.63338860284493
+    }
+  ],
+  "inp": "Not measured; navigation TBT is not INP",
+  "sources": {
+    "before": "outputs/performance/before",
+    "intermediate": "outputs/performance/after-lighthouse",
+    "after": "outputs/performance/final-lighthouse"
+  },
+  "load": [
+    {
+      "visitors": 12,
+      "concurrency": 1,
+      "completedVisitors": 12,
+      "durationMs": 66328,
+      "requestsPerSecond": 2.71,
+      "requests": 180,
+      "errors": 0,
+      "p50Ms": 284.15,
+      "p95Ms": 353.2,
+      "p99Ms": 546.02,
+      "maxMs": 779.18,
+      "byPhase": {
+        "init": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 151.08,
+          "p95Ms": 779.18,
+          "p99Ms": 779.18,
+          "maxMs": 779.18
+        },
+        "view": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 288.07,
+          "p95Ms": 546.02,
+          "p99Ms": 546.02,
+          "maxMs": 546.02
+        },
+        "answer": {
+          "requests": 144,
+          "errors": 0,
+          "p50Ms": 285.24,
+          "p95Ms": 351.01,
+          "p99Ms": 395.25,
+          "maxMs": 404.51
+        },
+        "read": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 134.54,
+          "p95Ms": 140.39,
+          "p99Ms": 140.39,
+          "maxMs": 140.39
+        }
+      }
+    },
+    {
+      "visitors": 12,
+      "concurrency": 3,
+      "completedVisitors": 12,
+      "durationMs": 22347,
+      "requestsPerSecond": 8.05,
+      "requests": 180,
+      "errors": 0,
+      "p50Ms": 283.54,
+      "p95Ms": 334.64,
+      "p99Ms": 660.71,
+      "maxMs": 678.01,
+      "byPhase": {
+        "init": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 158.38,
+          "p95Ms": 678.01,
+          "p99Ms": 678.01,
+          "maxMs": 678.01
+        },
+        "view": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 282.94,
+          "p95Ms": 542.33,
+          "p99Ms": 542.33,
+          "maxMs": 542.33
+        },
+        "answer": {
+          "requests": 144,
+          "errors": 0,
+          "p50Ms": 284.36,
+          "p95Ms": 319.94,
+          "p99Ms": 343.63,
+          "maxMs": 371.06
+        },
+        "read": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 133.42,
+          "p95Ms": 154.71,
+          "p99Ms": 154.71,
+          "maxMs": 154.71
+        }
+      }
+    },
+    {
+      "visitors": 12,
+      "concurrency": 5,
+      "completedVisitors": 12,
+      "durationMs": 16794,
+      "requestsPerSecond": 10.72,
+      "requests": 180,
+      "errors": 0,
+      "p50Ms": 282.98,
+      "p95Ms": 375.38,
+      "p99Ms": 806.33,
+      "maxMs": 878.05,
+      "byPhase": {
+        "init": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 156.03,
+          "p95Ms": 878.05,
+          "p99Ms": 878.05,
+          "maxMs": 878.05
+        },
+        "view": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 280.31,
+          "p95Ms": 595.56,
+          "p99Ms": 595.56,
+          "maxMs": 595.56
+        },
+        "answer": {
+          "requests": 144,
+          "errors": 0,
+          "p50Ms": 284.33,
+          "p95Ms": 339.41,
+          "p99Ms": 424.33,
+          "maxMs": 451.02
+        },
+        "read": {
+          "requests": 12,
+          "errors": 0,
+          "p50Ms": 132.43,
+          "p95Ms": 142.3,
+          "p99Ms": 142.3,
+          "maxMs": 142.3
+        }
+      }
+    }
+  ],
+  "visual": {
+    "checksPass": true,
+    "beforeMeasurements": 112,
+    "afterMeasurements": 112,
+    "geometryDifferences": 0,
+    "screenshotPairs": 112,
+    "pixelIdentical": 91,
+    "pixelDifferent": 21,
+    "dimensionsDifferent": 0,
+    "checkoutMatches": true,
+    "capturedErrorsMissing": false,
+    "note": "Pixel differences are unmasked and require review. Video frames and image encoding can differ without changing layout."
+  },
+  "resilience": {
+    "result": "PASS",
+    "scenarios": 9,
+    "durationMs": 46130,
+    "timeoutObservedMs": 20352,
+    "pageErrors": 0
+  },
+  "securityAudit": {
+    "before": {
+      "info": 0,
+      "low": 0,
+      "moderate": 6,
+      "high": 6,
+      "critical": 1,
+      "total": 13
+    },
+    "after": {
+      "info": 0,
+      "low": 0,
+      "moderate": 4,
+      "high": 0,
+      "critical": 0,
+      "total": 4
+    }
+  },
+  "staticDatabaseCalls": {
+    "fullNewJourneySdk": {
+      "before": 44,
+      "after": 38
+    },
+    "fullNewJourneySql": {
+      "before": 73,
+      "after": 67
+    },
+    "posts": 18
+  }
+}

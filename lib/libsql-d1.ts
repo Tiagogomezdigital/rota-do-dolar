@@ -51,28 +51,39 @@ function d1Result<T>(result:ResultSet,duration:number):D1Result<T>{
   };
 }
 
-/** The application's D1 operations backed by libSQL; batches stay a single write transaction. */
+/** D1-compatible mutations use a write transaction; reports can request a read transaction. */
 export class LibsqlD1Database implements D1Database{
   readonly client:Client;
   constructor(client:Client){this.client=client;}
   prepare(sql:string):D1PreparedStatement{return new LibsqlD1Statement(this,sql,[]);}
-  async batch<T=unknown>(statements:D1PreparedStatement[]):Promise<D1Result<T>[]>{
+  batch<T=unknown>(statements:D1PreparedStatement[]):Promise<D1Result<T>[]>{
+    return this.executeBatch<T>(statements,'write');
+  }
+  readBatch<T=unknown>(statements:D1PreparedStatement[]):Promise<D1Result<T>[]>{
+    return this.executeBatch<T>(statements,'read');
+  }
+  private async executeBatch<T>(statements:D1PreparedStatement[],mode:'write'|'read'):Promise<D1Result<T>[]>{
     const queries=statements.map(statement=>{
       if(!(statement instanceof LibsqlD1Statement)||statement.owner!==this){
         throw new TypeError('A batch must contain statements prepared by the same database.');
+      }
+      if(mode==='read'&&!/^\s*SELECT\b/i.test(statement.sql)){
+        throw new TypeError('Read batches only accept SELECT statements.');
       }
       return {sql:statement.sql,args:statement.args};
     });
     if(!queries.length)return [];
     const start=performance.now();
-    const results=await this.client.batch(queries,'write');
+    const results=await this.client.batch(queries,mode);
     const duration=performance.now()-start;
     return results.map(result=>d1Result<T>(result,duration));
   }
   exec(_query:string):Promise<D1ExecResult>{
+    void _query;
     return Promise.reject(new Error('D1 exec is not used by this application; use the schema migration script.'));
   }
   withSession(_constraintOrBookmark?:D1SessionBookmark|D1SessionConstraint):D1DatabaseSession{
+    void _constraintOrBookmark;
     throw new Error('D1 session bookmarks are not supported by the libSQL adapter.');
   }
   dump():Promise<ArrayBuffer>{

@@ -40,3 +40,13 @@ Os scripts genéricos `dev`, `build` e `start`, as dependências Cloudflare e `.
 Faça verificações proporcionais à mudança e corrija falhas observadas. Para código, use a checagem TypeScript e o build Vercel. Para fluxo, banco ou vídeo, consulte os scripts atuais `check-quiz.mjs`, `check-libsql-adapter.mjs` e `check-video-progress.mjs` em `scripts/`. Testes que gravam exigem o servidor local e o banco TEST. Preserve transações, comparação de revisão, retomada de sessão e proteção de recusa entre abas.
 
 Relate o que mudou, como foi verificado e qualquer limite real. Não declare publicação, vínculo Git ou migração concluídos apenas porque uma operação foi iniciada.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

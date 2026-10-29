@@ -1,6 +1,7 @@
 import {adminAccess,privateHeaders} from '@/lib/admin-auth';
-import {database} from '@/lib/database';
+import {database,readBatch} from '@/lib/database';
 import {CONTENT_VERSION,DECLINED_STEP} from '@/lib/content';
+import {logBackendError} from '@/lib/backend-log';
 export const dynamic='force-dynamic';
 const reply=(data:unknown,status=200)=>Response.json(data,{status,headers:privateHeaders});
 export async function GET(req:Request){
@@ -18,12 +19,12 @@ export async function GET(req:Request){
   const page=Math.min(100000,Math.max(0,Number(url.searchParams.get('page'))||0));if(!Number.isInteger(page))return reply({error:'Página inválida.'},400);
   const now=Date.now(),since=range==='all'?0:now-Number(range)*86400000;
   const filter='s.created_at>=? AND s.content_version=?';const values=[since,CONTENT_VERSION];
-  const [totals,choices,funnel,sessions]=await db.batch([
+  const [totals,choices,funnel,sessions]=await readBatch(db,[
    db.prepare(`SELECT COUNT(*) visits,SUM(started_at IS NOT NULL) started,SUM(completed_at IS NOT NULL) completed,SUM(cta_clicked_at IS NOT NULL) cta,SUM(current_step=?) declined,SUM(started_at IS NOT NULL AND completed_at IS NULL AND current_step<>? AND last_seen<?) abandoned FROM sessions s WHERE ${filter}`).bind(DECLINED_STEP,DECLINED_STEP,now-1800000,...values),
    db.prepare(`SELECT a.question_id,a.option_id,COUNT(*) n FROM answers a JOIN sessions s ON s.id=a.session_id WHERE ${filter} GROUP BY a.question_id,a.option_id`).bind(...values),
    db.prepare(`SELECT v.step,COUNT(*) n FROM step_views v JOIN sessions s ON s.id=v.session_id WHERE ${filter} GROUP BY v.step ORDER BY v.step`).bind(...values),
    db.prepare(`SELECT s.id,s.created_at,s.started_at,s.last_seen,s.current_step,s.completed_at,s.cta_clicked_at,s.source,s.device,(SELECT COUNT(*) FROM answers a WHERE a.session_id=s.id) answer_count FROM sessions s WHERE ${filter} ORDER BY s.created_at DESC,s.id DESC LIMIT 20 OFFSET ?`).bind(...values,page*20),
   ]);
   return reply({totals:totals.results[0],choices:choices.results,funnel:funnel.results,sessions:sessions.results,page,generatedAt:now,range});
- }catch(e){console.error('admin read failed',e);return reply({error:'Não foi possível carregar as respostas. Tente atualizar em instantes.'},503);}
+ }catch(e){logBackendError('admin read failed',e);return reply({error:'Não foi possível carregar as respostas. Tente atualizar em instantes.'},503);}
 }

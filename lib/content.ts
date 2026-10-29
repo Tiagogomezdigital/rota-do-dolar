@@ -16,11 +16,13 @@ export const content = {
     cta:'🏁 COMEÇAR AGORA',
     imageUrl:'/tiago-gomes/images/tiago-rota-do-dolar-1536.webp',
     imageSrcSet:'/tiago-gomes/images/tiago-rota-do-dolar-576.webp 576w, /tiago-gomes/images/tiago-rota-do-dolar-960.webp 960w, /tiago-gomes/images/tiago-rota-do-dolar-1536.webp 1536w',
+    imageAvifSrcSet:'/tiago-gomes/images/optimized/tiago-rota-do-dolar-576.bb46527de47c.avif 576w, /tiago-gomes/images/optimized/tiago-rota-do-dolar-768.ba52d97371ac.avif 768w, /tiago-gomes/images/optimized/tiago-rota-do-dolar-960.a756fcdf0985.avif 960w, /tiago-gomes/images/optimized/tiago-rota-do-dolar-1152.c514d3379b93.avif 1152w, /tiago-gomes/images/optimized/tiago-rota-do-dolar-1536.dc500ec7a3e1.avif 1536w',
   },
   expert:{
     name:'Tiago Gomez', title:'MUITO PRAZER, MEU NOME É TIAGO GOMEZ',
     imageUrl:'/tiago-gomes/images/tiago-momentos-hero-1536.webp',
     imageSrcSet:'/tiago-gomes/images/tiago-momentos-hero-576.webp 576w, /tiago-gomes/images/tiago-momentos-hero-960.webp 960w, /tiago-gomes/images/tiago-momentos-hero-1536.webp 1536w',
+    imageAvifSrcSet:'/tiago-gomes/images/optimized/tiago-momentos-hero-576.778cdcb85b8d.avif 576w, /tiago-gomes/images/optimized/tiago-momentos-hero-768.b7d4f5340b28.avif 768w, /tiago-gomes/images/optimized/tiago-momentos-hero-960.c5058aa5a02f.avif 960w, /tiago-gomes/images/optimized/tiago-momentos-hero-1152.54e323645850.avif 1152w, /tiago-gomes/images/optimized/tiago-momentos-hero-1536.03a66a8cf479.avif 1536w',
     paragraphs:[
       'Quando você cresce vendo a dor de perto, a vida te obriga a escolher rápido: ser a vítima das circunstâncias ou o herói das próximas gerações. Eu escolhi lutar. Sem desculpas e sem negociar com o trabalho duro.',
       'O mercado digital me tirou da comunidade e me colocou no topo. Mas a verdadeira sabedoria veio de errar, consertar, descentralizar e construir um império que opera em diversas frentes no Brasil e lá fora, faturando milhões com inteligência e escala.',

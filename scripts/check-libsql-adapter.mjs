@@ -6,6 +6,7 @@ import {pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {createClient} from '@libsql/client';
 import {LibsqlD1Database} from '../lib/libsql-d1.ts';
+import {readJourneySnapshot} from '../lib/journey-snapshot.ts';
 
 const directory=await mkdtemp(join(tmpdir(),'rota-libsql-check-'));
 const url=pathToFileURL(join(directory,'quiz.db')).href;
@@ -33,8 +34,48 @@ try{
   ]));
   assert.equal(await a.prepare('SELECT COUNT(*) n FROM rollback_probe').first('n'),0);
   await assert.rejects(a.batch([b.prepare('SELECT 1')]),/same database/);
+  await assert.rejects(a.readBatch([b.prepare('SELECT 1')]),/same database/);
+
+  // Reports must remain readable while another connection holds the writer lock.
+  await clientA.execute('CREATE TABLE report_probe(id TEXT PRIMARY KEY,value INTEGER NOT NULL)');
+  await clientA.execute("INSERT INTO report_probe(id,value) VALUES ('report',0)");
+  const writer=await clientB.transaction('write');
+  try{
+    await writer.execute("UPDATE report_probe SET value=1 WHERE id='report'");
+    const report=await a.readBatch([a.prepare('SELECT value FROM report_probe WHERE id=?').bind('report')]);
+    assert.equal(report[0].results[0].value,0,'Read transactions see committed rows without requesting the writer lock.');
+    assert.equal(report[0].meta.changes,0);
+    await writer.commit();
+  }finally{writer.close();}
+  assert.equal(await a.prepare('SELECT value FROM report_probe').first('value'),1);
+  await assert.rejects(a.readBatch([a.prepare('UPDATE report_probe SET value=2')]),/Read batches only accept SELECT/);
+  assert.equal(await a.prepare('SELECT value FROM report_probe').first('value'),1);
 
   const timestamp=1793160000000;
+  await a.prepare('INSERT INTO sessions(id,content_version,created_at,last_seen,current_step,furthest_step) VALUES (?,?,?,?,2,2)').bind('test-snapshot','test-edition',timestamp,timestamp).run();
+  assert.equal(await readJourneySnapshot(a,'missing-session','test-edition'),null);
+  assert.equal(await readJourneySnapshot(a,'test-snapshot','other-edition'),null);
+  assert.deepEqual(await readJourneySnapshot(a,'test-snapshot','test-edition'),{step:2,answers:{},completed:false,ctaClicked:false,revision:timestamp});
+  await a.batch([
+    a.prepare('INSERT INTO answers(session_id,question_id,option_id,answered_at) VALUES (?,?,?,?)').bind('test-snapshot','compromisso','sim',timestamp),
+    a.prepare('INSERT INTO answers(session_id,question_id,option_id,answered_at) VALUES (?,?,?,?)').bind('test-snapshot','genero','homem',timestamp),
+  ]);
+  // Commit on another connection after the read, before its SDK promise resolves.
+  // A split session/answer read would combine the old revision with the new answer.
+  let snapshotReads=0;
+  const interleaved=new LibsqlD1Database({execute:async statement=>{
+    snapshotReads++;
+    const result=await clientA.execute(statement);
+    if(snapshotReads===1)await b.batch([
+      b.prepare('UPDATE answers SET option_id=?,answered_at=? WHERE session_id=? AND question_id=?').bind('mulher',timestamp+1,'test-snapshot','genero'),
+      b.prepare('UPDATE sessions SET current_step=16,furthest_step=16,last_seen=?,completed_at=?,cta_clicked_at=? WHERE id=?').bind(timestamp+1,timestamp+1,timestamp+1,'test-snapshot'),
+    ]);
+    return result;
+  }});
+  assert.deepEqual(await readJourneySnapshot(interleaved,'test-snapshot','test-edition'),{step:2,answers:{compromisso:'sim',genero:'homem'},completed:false,ctaClicked:false,revision:timestamp});
+  assert.equal(snapshotReads,1,'Read the session and answers in one database operation.');
+  assert.deepEqual(await readJourneySnapshot(a,'test-snapshot','test-edition'),{step:16,answers:{compromisso:'sim',genero:'mulher'},completed:true,ctaClicked:true,revision:timestamp+1});
+
   const init=await a.prepare('INSERT INTO sessions(id,content_version,created_at,last_seen,current_step,furthest_step) VALUES (?,?,?,?,2,2)').bind('test-cas','test-edition',timestamp,timestamp).run();
   assert.equal(init.meta.changes,1);
   const staleA=await a.prepare('SELECT current_step,last_seen FROM sessions WHERE id=?').bind('test-cas').first();
@@ -60,9 +101,10 @@ try{
     answers:{rows:[{session_id:'original-old',question_id:'old-question',option_id:'historical-option',answered_at:timestamp+1},{session_id:'original-current',question_id:'compromisso',option_id:'sim',answered_at:timestamp+3}]},
     step_views:{rows:[{session_id:'original-old',step:0,first_seen:timestamp},{session_id:'original-current',step:16,first_seen:timestamp+8}]},
   }};
-  const input=join(directory,'backup.json'),importUrl=pathToFileURL(join(directory,'import.db')).href;
+  const input=join(directory,'backup.json'),importUrl=pathToFileURL(join(directory,'import.db')).href,emptyEnv=join(directory,'empty.env');
   await writeFile(input,JSON.stringify(fixture));
-  const runImport=()=>spawnSync(process.execPath,[resolve('scripts/import-quiz-data.mjs'),'--input',input,'--env-file','/dev/null','--allow-local'],{
+  await writeFile(emptyEnv,'');
+  const runImport=()=>spawnSync(process.execPath,[resolve('scripts/import-quiz-data.mjs'),'--input',input,'--env-file',emptyEnv,'--allow-local'],{
     cwd:resolve('.'),encoding:'utf8',env:{...process.env,TURSO_DATABASE_URL:importUrl,TURSO_AUTH_TOKEN:''},
   });
   const first=runImport();assert.equal(first.status,0,first.stderr);assert.deepEqual(JSON.parse(first.stdout).counts,{sessions:2,answers:2,step_views:2});
@@ -79,7 +121,7 @@ try{
   await writeFile(input,JSON.stringify(fixture));
   const orphan=runImport();assert.equal(orphan.status,1);assert.match(orphan.stderr,/orphan rows/);
 
-  console.log('PASS: libSQL bindings/results, transactional rollback, concurrent CAS, idempotent migration, all editions/timestamps, stale snapshot protection and orphan rejection.');
+  console.log('PASS: libSQL bindings/results, read-only reports without writer lock, consistent journey snapshots, transactional rollback, concurrent CAS, idempotent migration, all editions/timestamps, stale snapshot protection and orphan rejection.');
 }finally{
-  clientA.close();clientB.close();await rm(directory,{recursive:true,force:true});
+  clientA.close();clientB.close();await rm(directory,{recursive:true,force:true,maxRetries:10,retryDelay:100});
 }

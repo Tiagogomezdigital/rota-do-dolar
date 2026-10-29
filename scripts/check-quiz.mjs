@@ -40,6 +40,8 @@ assert.equal(saved.ctaClicked,false);
 assert.equal((await journey({action:'init'})).step,OFFER_STEP);
 await journey({action:'cta'});
 assert.equal((await journey()).ctaClicked,true);
+await journey({action:'cta'});
+assert.equal((await journey()).ctaClicked,true,'Repeating the checkout action must remain idempotent.');
 await journey({action:'view',step:4});
 await journey({action:'answer',questionId:'momento',optionId:'autonomo'});
 assert.equal((await journey()).answers.momento,'autonomo');
@@ -80,7 +82,55 @@ const raceSnapshot=await racing();
 assert.equal(raceSnapshot.step,3);
 assert.equal(Object.keys(raceSnapshot.answers).length,2);
 assert.equal(raced.find(result=>result.error).answers.genero,raceSnapshot.answers.genero,'Conflict must return the winning answer for UI resynchronization.');
+
+// An old request must remain stale even when a different tab returns to the same step.
+const aba=visitor();
+const abaInitial=await aba({action:'init',source:'qa-revision-aba'},201);
+assert.ok(Number.isSafeInteger(abaInitial.revision));
+let abaState=await aba({action:'view',step:1,expectedStep:0,expectedRevision:abaInitial.revision});
+abaState=await aba({action:'answer',questionId:'compromisso',optionId:'sim',expectedStep:1,expectedRevision:abaState.revision});
+const obsoleteRevision=abaState.revision;
+abaState=await aba({action:'answer',questionId:'genero',optionId:'homem',expectedStep:2,expectedRevision:obsoleteRevision});
+abaState=await aba({action:'view',step:2,expectedStep:3,expectedRevision:abaState.revision});
+const staleAfterRevisit=await aba({action:'answer',questionId:'genero',optionId:'mulher',expectedStep:2,expectedRevision:obsoleteRevision},409);
+assert.equal(staleAfterRevisit.step,2);
+assert.equal(staleAfterRevisit.revision,abaState.revision);
+assert.equal(staleAfterRevisit.answers.genero,'homem','An old answer must not overwrite a later explicit revisit.');
+for(const invalidRevision of [-1,1.5,'123',null]){
+ await aba({action:'answer',questionId:'genero',optionId:'mulher',expectedStep:2,expectedRevision:invalidRevision},400);
+}
+
+// Discarding a successful response models a connection lost after the server committed.
+const possiblyCommitted={action:'answer',questionId:'genero',optionId:'mulher',expectedStep:2,expectedRevision:abaState.revision};
+await aba(possiblyCommitted);
+const afterLostResponse=await aba(possiblyCommitted,409);
+assert.equal(afterLostResponse.step,3);
+assert.equal(afterLostResponse.answers.genero,'mulher');
+assert.equal(Object.keys(afterLostResponse.answers).length,2);
+assert.ok(afterLostResponse.revision>abaState.revision);
+assert.deepEqual(await aba({action:'init'}),await aba(),'Reload/resume must recover a write whose acknowledgement was lost.');
+
+// The completed QA session can revisit each question without creating duplicate answers.
+let allOptionsState=await journey();
+let checkedOptions=2; // Commitment yes/no are both covered above.
+for(const [index,question] of questions.entries()){
+ if(question.id==='compromisso')continue;
+ for(const option of question.options){
+  allOptionsState=await journey({action:'view',step:index+1,expectedStep:allOptionsState.step,expectedRevision:allOptionsState.revision});
+  await journey({action:'answer',questionId:question.id,optionId:'__invalid__',expectedStep:index+1,expectedRevision:allOptionsState.revision},400);
+  const advanced=await journey({action:'answer',questionId:question.id,optionId:option.id,expectedStep:index+1,expectedRevision:allOptionsState.revision});
+  assert.equal(advanced.step,index+2);
+  assert.ok(advanced.revision>allOptionsState.revision);
+  allOptionsState=await journey();
+  assert.equal(allOptionsState.answers[question.id],option.id);
+  assert.equal(allOptionsState.revision,advanced.revision);
+  assert.equal(Object.keys(allOptionsState.answers).length,questions.length);
+  checkedOptions++;
+ }
+}
+assert.equal(checkedOptions,questions.reduce((total,question)=>total+question.options.length,0));
+assert.equal((await declined({action:'init'})).answers.compromisso,'sim','Independent visitors must retain their own answers.');
 const admin=await fetch(`${origin}/api/admin`);
 assert.ok([401,403].includes(admin.status),'Admin must remain protected.');
 assert.equal((await fetch(`${origin}/tiago-gomes/obrigado`)).status,200);
-console.log('PASS: 12 answers, resume, explicit edit, stale-tab resynchronization, transactional concurrent answers, refusal protection, 7-second gate, CTA tracking, origin validation, admin protection and thank-you route.');
+console.log(`PASS: ${questions.length} questions, all ${checkedOptions} options, invalid options, resume, explicit edit, stale-tab and ABA revision conflicts, lost acknowledgement recovery, concurrent answers, refusal protection, 7-second gate, idempotent CTA, origin validation, admin protection and thank-you route.`);
