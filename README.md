@@ -48,10 +48,9 @@ A montagem de viagens, família, carro e trabalho é ilustrativa. As notificaç�
 
 Permanecem anotados para solicitar:
 
-- Link ou código do vídeo de obrigado e minuto/segundo para liberar a afiliação.
 - Foto real de Tiago com Karen e Maluzinha.
 
-A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. A página `/obrigado` usa fundo preto, headline na faixa vermelha e placeholder vertical. Por solicitação do usuário, o botão de afiliação está visível enquanto o embed e o timing estão pendentes (`content.thanks.showButtonImmediately`). Ao integrar a VSL definitiva, desative essa opção e configure a liberação por reprodução. O alias `/tiago-gomes/obrigado` continua disponível. Abrir a página de obrigado não comprova pagamento.
+A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. A página `/obrigado` usa fundo preto, headline na faixa vermelha e a VSL vertical VTurb `6ae2fcace18a71ff77483cdb`, com os preloads específicos dessa aula. O botão verde pulsante “LIBERAR AFILIAÇÃO NA WIX” fica oculto inicialmente e é liberado aos 318 segundos (5:18) pela API `displayHiddenElements`, sem persistir a liberação entre visitas. O destino é `https://affiliates.express/zj6w12ob9r`. A preferência de reduzir movimento desativa a pulsação. O alias `/tiago-gomes/obrigado` continua disponível. Abrir a página de obrigado não comprova pagamento.
 
 ## Validação e publicação
 
@@ -63,6 +62,8 @@ npm run build:vercel
 ```
 
 Use os testes existentes conforme a alteração. `scripts/check-video-progress.mjs` verifica a liberação por reprodução e `scripts/check-libsql-adapter.mjs` usa SQLite temporário local. `scripts/check-quiz.mjs` precisa de servidor local com o banco TEST e grava sessões de QA nesse ambiente. Não aponte testes de gravação para produção.
+
+`node scripts/check-vturb-pitch.mjs` verifica a configuração da VSL de obrigado, o limiar de 318 segundos, o registro do delay pela API e o destino da afiliação, sem acessar o banco.
 
 O repositório `Tiagogomezdigital/rota-do-dolar` está conectado ao projeto Vercel existente. A ramificação de produção é `main`: um push nela inicia a publicação pela integração Git. Confira a configuração Git do projeto antes de enviar alterações. Use uma ramificação de trabalho e preview quando a mudança precisar de revisão. As variáveis e integrações existentes são mantidas na Vercel; não adicione tokens de deploy ao repositório.
 

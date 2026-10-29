@@ -1,11 +1,14 @@
 'use client';
 
 import {preload,prefetchDNS} from 'react-dom';
+import {usePathname} from 'next/navigation';
 import {content} from '@/lib/content';
 
 /** Preload the supplied assets without executing the player on the quiz's opening screen. */
 export function VturbResources(){
-  const config=content.offer.video.vturb;
+  const pathname=usePathname();
+  const thanksRoute=/^\/(?:tiago-gomes\/)?obrigado\/?$/.test(pathname||'');
+  const config=(thanksRoute?content.thanks.video:content.offer.video).vturb;
   if(!config)return null;
   preload(config.scriptUrl,{as:'script'});
   preload('https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js',{as:'script'});
