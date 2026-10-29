@@ -25,7 +25,7 @@
   margin: 0 auto 18px;
   padding: 8px 10px;
   background: #ff0800;
-  font-size: clamp(20px, 3.48vw, 40px);
+  font-size: clamp(20px, 3.1vw, 34px);
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -.025em;
@@ -39,7 +39,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: min(360px, calc((100svh - 150px) * .5625));
+  width: min(360px, calc((100svh - 190px) * .5625));
   min-width: 190px;
   aspect-ratio: 9 / 16;
   overflow: hidden;
