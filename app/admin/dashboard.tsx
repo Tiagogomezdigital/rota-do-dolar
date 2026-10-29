@@ -34,7 +34,7 @@ export default function Dashboard({email}:{email:string}){
  const pending=[
   !content.offer.video.src&&!content.offer.video.embedUrl&&!content.offer.video.vturb?'Solicitar o link ou código da VSL final do quiz.':null,
   content.offer.video.ctaMode!=='immediate'&&content.offer.video.revealAtSeconds===null?'Solicitar o minuto e segundo do pitch para liberar o checkout.':null,
-  !content.thanks.video.src&&!content.thanks.video.embedUrl?'Solicitar o vídeo da página de obrigado.':null,
+  !content.thanks.video.src&&!content.thanks.video.embedUrl&&!content.thanks.video.vturb?'Solicitar o vídeo da página de obrigado.':null,
   content.thanks.video.revealAtSeconds===null?'Solicitar o tempo de liberação do botão de afiliação.':null,
  ].filter(Boolean);
  return <main className="admin-layout"><header className="admin-header"><a href="/admin" className="wordmark"><span className="brand-square">↗</span>ROTA DO DÓLAR <span className="admin-word">/ ADMIN</span></a><div className="admin-header-actions"><a href="/" target="_blank" rel="noreferrer" className="header-link">Ver experiência <ArrowUpRight size={15}/></a><a href="/admin/logout?return_to=/admin" target="_top" aria-label="Sair da conta" title="Sair da conta"><LogOut size={17}/></a></div></header>

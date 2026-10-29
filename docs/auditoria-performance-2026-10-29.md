@@ -1,10 +1,16 @@
 # Auditoria de performance, integridade e confiabilidade
 
-Data: 29/10/2026. Projeto: **Rota do Dólar**, repositório privado `Tiagogomezdigital/rota-do-dolar`.
+Data: 29/10/2026. Projeto: **Rota do Dólar**, repositório `Tiagogomezdigital/rota-do-dolar`.
 
 Implementação na branch `codex/performance-audit`, comparada ao commit `fac9fc20f7ba11565603f902948fec218a8fc555`. Build Vercel e testes locais aprovados. Esta auditoria não publicou alterações, não executou migrações e não alterou DNS, infraestrutura ou dados de produção.
 
 O carregamento mobile passou de **85 para 97 pontos**, o LCP mediano caiu de **4,386 s para 2,416 s** e a transferência inicial caiu **59,4%**. As perguntas, alternativas, textos, ordem, destinos e identidade visual foram preservados. Isso comprova a melhoria no laboratório descrito abaixo; não comprova capacidade para milhares de visitantes simultâneos.
+
+### Integração posterior para publicação
+
+Após a conclusão da auditoria em `0f8277d`, o usuário autorizou push e deploy. A consulta ao GitHub encontrou três commits adicionais em `main`, até `c9c0918`, que foram integrados preservando seu conteúdo: a página de obrigado já tem VSL VTurb, layout próprio, afiliação liberada aos 318 segundos (5:18) e destino `https://affiliates.express/zj6w12ob9r`. Os preloads dessa aula permanecem específicos da página de obrigado, sem voltar ao carregamento global na abertura do quiz.
+
+As medições e a descrição de pendências abaixo são o registro histórico da auditoria anterior a essa integração. A pendência do vídeo de obrigado não se aplica mais à versão integrada; sua configuração atual está no README e no roteiro. A visibilidade observada do repositório no GitHub era pública; ela não foi alterada nesta tarefa. O painel administrativo do site continua restrito.
 
 ## A. Diagnóstico inicial
 

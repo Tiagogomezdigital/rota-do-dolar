@@ -55,9 +55,14 @@ export const content = {
     notice:{text:'Após assistir o vídeo, aperte no botão abaixo, antes que as',emphasis:'vagas encerrem...'},
   },
   thanks:{
+    showButtonImmediately:false,
     title:'IMPORTANTE: ESTA AULA SÓ ESTÁ DISPONÍVEL AQUI',
-    video:{src:'',embedUrl:'',revealAtSeconds:null} as VideoConfig,
-    destination:'https://affiliates.express/rotadodolar', cta:'LIBERAR AFILIAÇÃO NA WIX',
+    video:{src:'',embedUrl:'',revealAtSeconds:318,ctaMode:'after-playback',vturb:{
+      id:'vid-6ae2fcace18a71ff77483cdb',
+      scriptUrl:'https://scripts.converteai.net/17e48d12-3707-41cc-ae3c-447e3b6608f8/players/6ae2fcace18a71ff77483cdb/v4/player.js',
+      mediaPreloadUrl:'https://cdn.converteai.net/17e48d12-3707-41cc-ae3c-447e3b6608f8/6ae2fca15a97daff67837fc3/main.m3u8',
+    }} as VideoConfig,
+    destination:'https://affiliates.express/zj6w12ob9r', cta:'LIBERAR AFILIAÇÃO NA WIX',
   },
 };
 export type Option={id:string;label:string;icon:string;description?:string};
