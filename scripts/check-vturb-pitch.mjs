@@ -18,6 +18,6 @@ assert.equal(content.thanks.video.revealAtSeconds,318);
 assert.equal(content.thanks.showButtonImmediately,false);
 assert.equal(content.thanks.video.ctaMode,'after-playback');
 assert.equal(content.thanks.video.vturb.id,'vid-6ae2fcace18a71ff77483cdb');
-assert.equal(content.thanks.destination,'https://affiliates.express/zj6w12ob9r');
+assert.equal(content.thanks.destination,'https://affiliates.express/contadeagencia-g');
 assert.equal(content.offer.video.ctaMode,'immediate','The main quiz VSL must retain its immediate checkout.');
 console.log('PASS: VTurb pitch at 318 seconds, hidden by default, no persistent unlock, correct video and affiliate destination.');

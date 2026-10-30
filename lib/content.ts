@@ -3,6 +3,7 @@ export const CONTENT_VERSION = 'rota-dolar-v4-20261023';
 export const PROCESS_DURATION_MS = 7000;
 export type VturbConfig = {id:string;scriptUrl:string;mediaPreloadUrl:string};
 export type VideoConfig = {src:string; embedUrl:string; revealAtSeconds:number|null;vturb?:VturbConfig;ctaMode?:'immediate'|'after-playback'};
+export type ThanksPageConfig = {title:string;video:VideoConfig;destination:string;cta:string;showButtonImmediately:boolean};
 export const content = {
   brand:'ROTA DO DÓLAR', preview:false,
   flow:{
@@ -73,7 +74,18 @@ export const content = {
       scriptUrl:'https://scripts.converteai.net/17e48d12-3707-41cc-ae3c-447e3b6608f8/players/6ae2fcace18a71ff77483cdb/v4/player.js',
       mediaPreloadUrl:'https://cdn.converteai.net/17e48d12-3707-41cc-ae3c-447e3b6608f8/6ae2fca15a97daff67837fc3/main.m3u8',
     }} as VideoConfig,
-    destination:'https://affiliates.express/zj6w12ob9r', cta:'LIBERAR AFILIAÇÃO NA WIX',
+    destination:'https://affiliates.express/contadeagencia-g', cta:'LIBERAR AFILIAÇÃO NA WIX',
+  },
+  // Configuração independente da cópia em /obrigado-dan.
+  thanksDan:{
+    showButtonImmediately:false,
+    title:'IMPORTANTE: ESTA AULA SÓ ESTÁ DISPONÍVEL AQUI',
+    video:{src:'',embedUrl:'',revealAtSeconds:318,ctaMode:'after-playback',vturb:{
+      id:'vid-6ae2fcace18a71ff77483cdb',
+      scriptUrl:'https://scripts.converteai.net/17e48d12-3707-41cc-ae3c-447e3b6608f8/players/6ae2fcace18a71ff77483cdb/v4/player.js',
+      mediaPreloadUrl:'https://cdn.converteai.net/17e48d12-3707-41cc-ae3c-447e3b6608f8/6ae2fca15a97daff67837fc3/main.m3u8',
+    }} as VideoConfig,
+    destination:'https://affiliates.express/sitedeagencia-dan', cta:'LIBERAR AFILIAÇÃO NA WIX',
   },
 };
 export type Option={id:string;label:string;icon:string;description?:string};

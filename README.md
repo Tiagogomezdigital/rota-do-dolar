@@ -50,7 +50,9 @@ Permanecem anotados para solicitar:
 
 - Foto real de Tiago com Karen e Maluzinha.
 
-A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. A página `/obrigado` usa fundo preto, headline na faixa vermelha e a VSL vertical VTurb `6ae2fcace18a71ff77483cdb`, com os preloads específicos dessa aula. O botão verde pulsante “LIBERAR AFILIAÇÃO NA WIX” fica oculto inicialmente e é liberado aos 318 segundos (5:18) pela API `displayHiddenElements`, sem persistir a liberação entre visitas. O destino é `https://affiliates.express/zj6w12ob9r`. A preferência de reduzir movimento desativa a pulsação. O alias `/tiago-gomes/obrigado` continua disponível. Abrir a página de obrigado não comprova pagamento.
+A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. A página `/obrigado` usa fundo preto, headline na faixa vermelha e a VSL vertical VTurb `6ae2fcace18a71ff77483cdb`, com os preloads específicos dessa aula. O botão verde pulsante “LIBERAR AFILIAÇÃO NA WIX” fica oculto inicialmente e é liberado aos 318 segundos (5:18) pela API `displayHiddenElements`, sem persistir a liberação entre visitas. O destino é `https://affiliates.express/contadeagencia-g`. A preferência de reduzir movimento desativa a pulsação. O alias `/tiago-gomes/obrigado` continua disponível. Abrir a página de obrigado não comprova pagamento.
+
+A cópia `/obrigado-dan` usa o mesmo visual, VSL, CTA e delay de 318 segundos, com destino próprio `https://affiliates.express/sitedeagencia-dan`. Sua configuração está separada em `content.thanksDan`, em `lib/content.ts`. Altere esse bloco para mudar somente a versão do Dan; a original continua usando `content.thanks`. As duas páginas compartilham o componente `components/thanks-page.tsx`, com seletores distintos para liberar cada botão.
 
 ## Cópia independente Daniel
 
@@ -60,7 +62,7 @@ As telas e a lógica são compartilhadas em componentes para conservar as corre�
 
 O progresso de Daniel usa `/daniel/api/journey`, o cookie `journey_session_daniel` com caminho `/daniel` e a edição `rota-dolar-daniel-v1-20261029`. A versão Tiago mantém seu cookie, edição e aliases existentes. A separação aproveita `sessions.content_version`; não exige migração nem copia respostas anteriores. O painel `/admin` tem um seletor de versão que filtra métricas e detalhes da sessão. Banco e administradores autorizados continuam compartilhados.
 
-O checkout original permanece `https://pay.kiwify.com.br/14n3TC2?src=gula`. Não há uma página de obrigado exclusiva de Daniel: `/obrigado` e `/tiago-gomes/obrigado` permanecem como antes. Nenhuma configuração externa de retorno pós-compra foi alterada. Novas edições semânticas devem receber uma nova versão de conteúdo própria.
+O checkout original permanece `https://pay.kiwify.com.br/14n3TC2?src=gula`. Não foi criada uma rota `/daniel/obrigado`. As páginas existentes `/obrigado`, `/tiago-gomes/obrigado` e `/obrigado-dan` permanecem como antes. Nenhuma configuração externa de retorno pós-compra foi alterada. Novas edições semânticas devem receber uma nova versão de conteúdo própria.
 
 Valide isolamento com `node scripts/check-quiz-variants.mjs --confirm-test-database` e `QUIZ_TEST_ORIGIN` apontando para um servidor local no banco TEST. `node scripts/check-admin-variants.mjs` verifica os filtros do painel usando mocks locais, sem autenticar usuários ou acessar um banco remoto.
 
