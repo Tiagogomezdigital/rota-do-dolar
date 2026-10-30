@@ -8,6 +8,8 @@ Leia `README.md` e `docs/vercel.md`. Para mudanças em copy, telas, vídeos ou o
 
 O conteúdo fica em `lib/content.ts`. Preserve IDs de perguntas e alternativas; mudanças semânticas exigem avaliar uma nova `CONTENT_VERSION`. Não invente resultados financeiros, depoimentos ou métricas. Não insira travessões nas copys. Os materiais ainda pendentes estão registrados no roteiro e no painel; não preencha links ou tempos de vídeo por suposição.
 
+A cópia independente `/daniel` tem conteúdo em `lib/content-daniel.ts` e imagens em `public/daniel/`. Edite somente a variante solicitada. Os componentes são compartilhados; mantenha cookies, versões de conteúdo e relatórios separados. A cópia usa o mesmo banco e a mesma proteção administrativa, sem migrar respostas existentes.
+
 ## Ambiente correto
 
 - Repositório privado: `Tiagogomezdigital/rota-do-dolar`. Preserve este proprietário ao configurar Git e publicação.

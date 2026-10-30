@@ -52,6 +52,20 @@ Permanecem anotados para solicitar:
 
 A VSL principal usa o player VTurb e mostra o aviso e o checkout imediatamente abaixo do vídeo, conforme a referência aprovada. O checkout usa `https://pay.kiwify.com.br/14n3TC2?src=gula`. A página `/obrigado` usa fundo preto, headline na faixa vermelha e a VSL vertical VTurb `6ae2fcace18a71ff77483cdb`, com os preloads específicos dessa aula. O botão verde pulsante “LIBERAR AFILIAÇÃO NA WIX” fica oculto inicialmente e é liberado aos 318 segundos (5:18) pela API `displayHiddenElements`, sem persistir a liberação entre visitas. O destino é `https://affiliates.express/zj6w12ob9r`. A preferência de reduzir movimento desativa a pulsação. O alias `/tiago-gomes/obrigado` continua disponível. Abrir a página de obrigado não comprova pagamento.
 
+## Cópia independente Daniel
+
+A rota `/daniel` contém o quiz completo com as mesmas 12 perguntas, copy, imagens e vídeos da versão Tiago. A única diferença na oferta é o checkout do botão abaixo da VSL: `https://pay.kiwify.com.br/th9r45M?src=dandolar`. O endereço público é `https://rotadodolar.com.br/daniel`. O conteúdo editável é um snapshot próprio em `lib/content-daniel.ts`; editar esse arquivo não altera `lib/content.ts`. Os metadados da cópia ficam em `app/daniel/layout.tsx`, e suas imagens e favicon estão em `public/daniel/`.
+
+As telas e a lógica são compartilhadas em componentes para conservar as correções de responsividade e desempenho. Alterações nesses componentes gerais podem afetar ambas as versões; para uma personalização exclusiva, use a configuração da variante ou o atributo `data-quiz="daniel"` da experiência. Cada entrada importa somente sua configuração, sem carregar o conteúdo das duas versões no quiz público.
+
+O progresso de Daniel usa `/daniel/api/journey`, o cookie `journey_session_daniel` com caminho `/daniel` e a edição `rota-dolar-daniel-v1-20261029`. A versão Tiago mantém seu cookie, edição e aliases existentes. A separação aproveita `sessions.content_version`; não exige migração nem copia respostas anteriores. O painel `/admin` tem um seletor de versão que filtra métricas e detalhes da sessão. Banco e administradores autorizados continuam compartilhados.
+
+O checkout original permanece `https://pay.kiwify.com.br/14n3TC2?src=gula`. Não há uma página de obrigado exclusiva de Daniel: `/obrigado` e `/tiago-gomes/obrigado` permanecem como antes. Nenhuma configuração externa de retorno pós-compra foi alterada. Novas edições semânticas devem receber uma nova versão de conteúdo própria.
+
+Valide isolamento com `node scripts/check-quiz-variants.mjs --confirm-test-database` e `QUIZ_TEST_ORIGIN` apontando para um servidor local no banco TEST. `node scripts/check-admin-variants.mjs` verifica os filtros do painel usando mocks locais, sem autenticar usuários ou acessar um banco remoto.
+
+`node scripts/check-quiz-variants-browser.mjs --confirm-test-database` percorre Daniel no navegador, verifica retomada independente em duas abas e compara a abertura nas larguras de 320, 375, 430 e 1280 pixels. A comparação visual idêntica documenta o estado inicial da cópia; adapte essa expectativa quando houver uma personalização visual aprovada. O checkout é interceptado durante esse teste, sem abrir o serviço externo ou efetuar compras. Use as mesmas variáveis de Playwright e Chrome da seção de auditoria abaixo.
+
 ## Validação e publicação
 
 Para conferir tipos e build da aplicação Vercel:

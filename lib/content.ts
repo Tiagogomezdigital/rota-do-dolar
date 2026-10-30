@@ -5,6 +5,17 @@ export type VturbConfig = {id:string;scriptUrl:string;mediaPreloadUrl:string};
 export type VideoConfig = {src:string; embedUrl:string; revealAtSeconds:number|null;vturb?:VturbConfig;ctaMode?:'immediate'|'after-playback'};
 export const content = {
   brand:'ROTA DO DÓLAR', preview:false,
+  flow:{
+    preparing:'Preparando sua experiência…',continue:'Continuar',saving:'Salvando…',retry:'Tentar novamente',
+    chooseOption:'Escolha uma opção para avançar.',
+    commitmentTitle:'PARABÉNS! O seu acesso à Rota do Dólar com IA será liberado no final deste miniquestionário!',
+    heroAlt:'Montagem ilustrativa de Tiago Gomez em Paris, em viagens e com sua família e carro',
+    expertAlt:'Montagem ilustrativa de Tiago e sua família',expertCaption:'Montagem ilustrativa com IA.',
+    processing:{title:'Seu próximo passo',highlight:'começa aqui.',label:'Preparando resumo das respostas',checks:['Reunindo suas respostas','Organizando seus objetivos','Preparando seu acesso à apresentação'],waiting:'Aguarde um instante…',ready:'Tudo pronto para continuar.'},
+    result:{title:'A SUA JORNADA NOS',highlight:'PRÓXIMOS 30 DIAS',description:'Com base nas suas respostas, organizamos seu ponto de partida para conhecer o modelo e planejar seus próximos passos.',todayAmount:'$0,00',futureAmount:'$1.500 a $3.000',goal:'O que move você',dream:'Seu sonho',dailyTarget:'A meta diária que você escolheu',time:'Seu tempo para aplicar',perDay:'por dia'},
+    declined:{title:'Você decide quando',highlight:'dar o próximo passo.',description:'Você escolheu não continuar com o questionário.'},
+    videoTitle:'Rota do Dólar com IA',
+  },
   hero:{
     eyebrow:'COM TIAGO GOMEZ',
     title:'Descubra Como Pessoas Comuns Estão Fazendo De',

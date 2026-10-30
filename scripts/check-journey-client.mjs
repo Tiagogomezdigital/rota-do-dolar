@@ -13,6 +13,8 @@ assert.equal(lastRequest.url, '/tiago-gomes/api/journey');
 assert.equal(lastRequest.credentials, 'same-origin');
 assert.equal(lastRequest.headers['Content-Type'], 'application/json');
 assert.deepEqual(JSON.parse(lastRequest.body), {action: 'init', source: 'qa-client', device: 'mobile'});
+assert.deepEqual(await sendJourney({action:'init'}, {endpoint:'/daniel/api/journey',fetchImpl:fetchSuccess}), initial);
+assert.equal(lastRequest.url, '/daniel/api/journey', 'The Daniel entrypoint must send requests to its own session endpoint.');
 
 const advanceCommand = {action: 'answer', questionId: 'genero', optionId: 'mulher', expectedStep: 2, expectedRevision: 123};
 assert.deepEqual(await sendJourney(advanceCommand, {fetchImpl: async (_url, options) => {

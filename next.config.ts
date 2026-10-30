@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
     outputFileTracingRoot:process.cwd(),
     async headers(){return [
       {source:'/tiago-gomes/images/optimized/:path*',headers:[{key:'Cache-Control',value:'public, max-age=31536000, immutable'}]},
+      {source:'/daniel/images/optimized/:path*',headers:[{key:'Cache-Control',value:'public, max-age=31536000, immutable'}]},
+      {source:'/daniel/assets/:path*',headers:[{key:'Cache-Control',value:'public, max-age=3600, stale-while-revalidate=86400'}]},
       {source:'/assets/:path*',headers:[{key:'Cache-Control',value:'public, max-age=3600, stale-while-revalidate=86400'}]},
     ];},
     turbopack: { resolveAlias: { "cloudflare:workers": "./lib/cloudflare-next.ts" } },

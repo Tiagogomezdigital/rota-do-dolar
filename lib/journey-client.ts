@@ -16,6 +16,7 @@ type CheckoutCommand = ExpectedState & {action: 'cta'};
 export type JourneyCommand = InitCommand | AdvanceCommand | CheckoutCommand;
 export type JourneyAdvance = {ok: true; step: number; revision: number};
 export type JourneyCheckout = {ok: true; revision: number};
+export type JourneyResponse<T extends JourneyCommand> = T extends InitCommand ? JourneySnapshot : T extends CheckoutCommand ? JourneyCheckout : JourneyAdvance;
 
 const unavailableMessage = 'Não foi possível salvar agora. Tente novamente.';
 const timeoutMessage = 'A conexão demorou mais que o esperado. Tente novamente.';
@@ -47,11 +48,12 @@ function snapshot(value: unknown): value is JourneySnapshot {
     && typeof value.completed === 'boolean' && typeof value.ctaClicked === 'boolean';
 }
 
-type RequestOptions = {timeoutMs?: number; fetchImpl?: typeof fetch};
+type RequestOptions = {timeoutMs?: number; fetchImpl?: typeof fetch; endpoint?: string};
 
 export function sendJourney(body: InitCommand, options?: RequestOptions): Promise<JourneySnapshot>;
 export function sendJourney(body: AdvanceCommand, options?: RequestOptions): Promise<JourneyAdvance>;
 export function sendJourney(body: CheckoutCommand, options?: RequestOptions): Promise<JourneyCheckout>;
+export function sendJourney<T extends JourneyCommand>(body: T, options?: RequestOptions): Promise<JourneyResponse<T>>;
 /** Keep server acknowledgement authoritative. A timeout never retries a possibly committed write. */
 export async function sendJourney(body: JourneyCommand, options: RequestOptions = {}): Promise<JourneySnapshot | JourneyAdvance | JourneyCheckout> {
   const controller = new AbortController();
@@ -63,7 +65,7 @@ export async function sendJourney(body: JourneyCommand, options: RequestOptions 
   }, timeoutMs);
 
   try {
-    const response = await (options.fetchImpl ?? fetch)('/tiago-gomes/api/journey', {
+    const response = await (options.fetchImpl ?? fetch)(options.endpoint ?? '/tiago-gomes/api/journey', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},
